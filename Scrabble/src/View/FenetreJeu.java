@@ -11,11 +11,13 @@ import Model.Plateau;
 import Model.Sac;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -67,42 +69,26 @@ public class FenetreJeu extends StackPane{
 		motjoue.setFocusTraversable(false);
 		motjoue.setPromptText("Entrée un mot");
 		motjoue.autosize();
-		
+		motjoue.setPickOnBounds(false);
 		
 		MenuCommande mc=new MenuCommande(height,width);
-		mc.setTranslateY(height*0.2);
-		mc.setTranslateX(width*0.4);
+		//mc.setTranslateY(height*0.2);
+		mc.setTranslateX(width*0.07);
+		mc.setTranslateY(height*0.25);
+		mc.setAlignment(Pos.CENTER_LEFT);
+		mc.setPickOnBounds(false);
 		
-		 Rectangle rec = new Rectangle();
-	        rec.setWidth(800/15);
-	        rec.setHeight(800/15);
-	        rec.setStroke(Color.BLACK); 
-	        rec.setFill(Color.TRANSPARENT);
-	        rec.setStrokeWidth(2.5);
-	        rec.setArcHeight(10);
-	        rec.setArcWidth(10);
-	        rec.setFill(Color.BEIGE);
-	        rec.setOnMouseEntered(new EventHandler<MouseEvent>(){
-
-				@Override
-				public void handle(MouseEvent e) {
-					System.out.println("Dedan");
-					rec.setFill(Color.GREENYELLOW);
-				}
-	        	
-	        });
-	        StackPane spp=new StackPane();
-	        spp.getChildren().add(rec);
-	        
-	       
-	        
-		StackPane layout=new StackPane();
 		
+		 
 		ij=new InfoJoueur();
 		ij.setAlignment(Pos.TOP_LEFT);
 		//ij.afficheInfoJetons();
 		ij.afficheNom("Killua");
-		this.getChildren().addAll(background,motjoue,mc,ij,spp,p);
+		ij.setPickOnBounds(false);
+		ij.setTranslateX(-largeur*0.35);
+		ij.setTranslateY(-hauteur*0.25);
+		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
+		this.getChildren().addAll(background,motjoue,p,ij,mc);
 	
 		
 	

@@ -25,8 +25,8 @@ public class InfoJoueur extends StackPane{
 	{
 		cadreJetons=new GridPane();
 		labelNom=new Label();
-		this.setHeight(500);
-		this.setWidth(500);
+		this.setMaxHeight(500);
+		this.setMaxWidth(500);
 		this.getChildren().add(labelNom);
 	}
 	

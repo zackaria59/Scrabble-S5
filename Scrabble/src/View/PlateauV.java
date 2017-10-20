@@ -27,7 +27,7 @@ public class PlateauV extends StackPane {
 		grid.setMaxSize(t, t);
 		taille=t;
 		initialisePlateau();
-		
+		this.setPickOnBounds(false);
 	}
 	
 	public void initialisePlateau()

@@ -37,6 +37,7 @@ public class Tuile extends StackPane {
         rec.setArcHeight(10);
         rec.setArcWidth(10);
         rec.setFill(Color.BEIGE);
+        couleur=Color.BEIGE;
         this.setOnMouseEntered(new EventHandler<MouseEvent>(){
 
 			@Override
