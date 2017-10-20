@@ -40,18 +40,9 @@ public class InfoJoueur extends StackPane{
 	public void setInfoJoueur(Joueur j)
 	{
 		this.afficheNom(j.getPseudo());
+		
 	}
 	
-	public ArrayList<JetonV> genereJetonV(ArrayList<Jeton> jetons)
-	{
-		ArrayList<JetonV> jetonv=new ArrayList<JetonV>();
-		for(Jeton jt: jetons)
-		{
-			jetonv.add(new JetonV(jt.getLettre()));
-		}
-		
-		return jetonv;
-	}
 	
 	public void afficheInfoJetons(ArrayList<JetonV> jetonV)
 	{

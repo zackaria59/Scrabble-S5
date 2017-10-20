@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import Model.Jeton;
@@ -20,13 +21,14 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	private Plateau plateau;
 	private PlateauV plateauView;
 	private Partie partie;
-	
+	private FenetreJeu fj;
 	private JetonV jetonv;
+	private final Point pos = new Point();
 	
 	public ControllerPlateau(Partie partie,FenetreJeu fj)
 	{
 		this.partie=partie;
-		fj.ajoutController(this);
+		this.fj=fj;
 	}
 	
 	public Partie getPartie() {
@@ -45,6 +47,14 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		this.plateau = plateau;
 	}
 
+	public void setJoueurQuijoue(Joueur j)
+	{
+		fj.setInFoJoueur(j);
+		fj.ajoutController(this);
+	}
+	
+	
+	
 	public static void main(String[] args) throws Exception 
 	{
 		
@@ -60,15 +70,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	@Override
 	public void handle(MouseEvent e) {
 	
-		
-		if(e.getSource().equals(jetonv))
-		{
-			System.out.println("oooook");
-			if(partie.isJoueurJoueTour())
-			{
-				jetonv.setVisible(false);
-			}
-		}
+		JetonV test=(JetonV) e.getSource();
 		
 	}
 }

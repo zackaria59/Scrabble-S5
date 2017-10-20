@@ -1,7 +1,9 @@
 package View;
 
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -15,15 +17,16 @@ public class Tuile extends StackPane {
 	
 	private ImageView img;
 	private Rectangle rec;
+	private Color couleur;
 	
 	
 	public Tuile(double taille)
 	{
 	
-	    img=new ImageView(new Image(getClass().getClassLoader().getResource("images/jetons/jeton.png").toString(), true));
+	   /* img=new ImageView(new Image(getClass().getClassLoader().getResource("images/jetons/jeton.png").toString(), true));
         img.setFitHeight(taille/17);
         img.setFitWidth(taille/17);
-        
+        */
         
         rec = new Rectangle();
         rec.setWidth(taille/15);
@@ -34,6 +37,25 @@ public class Tuile extends StackPane {
         rec.setArcHeight(10);
         rec.setArcWidth(10);
         rec.setFill(Color.BEIGE);
+        this.setOnMouseEntered(new EventHandler<MouseEvent>(){
+
+			@Override
+			public void handle(MouseEvent e) {
+				System.out.println("Dedan");
+				rec.setFill(Color.GREENYELLOW);
+			}
+        	
+        });
+        
+        this.setOnMouseExited(new EventHandler<MouseEvent>(){
+
+			@Override
+			public void handle(MouseEvent e) {
+				
+				rec.setFill(couleur);
+			}
+        	
+        });
         
         this.getChildren().addAll(rec);
         
@@ -41,6 +63,7 @@ public class Tuile extends StackPane {
 	
 	public void setCouleur(Color c)
 	{
+		couleur=c;
 		rec.setStroke(c.darker());
 		rec.setFill(c.brighter());
 	}
@@ -50,11 +73,7 @@ public class Tuile extends StackPane {
 		this.getChildren().addAll(imgg);
 	}
 	
-	public void setCouleurr(Color c)
-	{
-		System.out.println("okk");
-		rec.setStroke(c);	
-	}
+
 
 	public Rectangle getRec() {
 		return rec;

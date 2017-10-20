@@ -4,11 +4,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-public class MenuCommande extends StackPane {
+public class MenuCommande extends VBox {
 
 	public MenuCommande(int h,int l)
 	{
@@ -35,7 +36,7 @@ public class MenuCommande extends StackPane {
         	
         });
      
-        Circle cir1=new Circle(120,100,60,Color.RED);
+        Circle cir1=new Circle(60,Color.RED);
         cir1.setOnMouseEntered(event ->{
         	DropShadow ds = new DropShadow();
             ds.setOffsetY(10.0);
@@ -50,9 +51,11 @@ public class MenuCommande extends StackPane {
         });
         
         
+        StackPane sp1=new StackPane();
+        sp1.getChildren().addAll(rec1,cir1);
        
        
         
-        this.getChildren().addAll(rec1,cir1);
+        this.getChildren().addAll(sp1);
 	}
 }

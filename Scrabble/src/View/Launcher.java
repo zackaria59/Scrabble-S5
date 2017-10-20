@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import Controller.ControllerPlateau;
+import Model.Jeton;
 import Model.Joueur;
 import Model.Partie;
 import Model.Plateau;
@@ -32,13 +33,21 @@ public class Launcher extends Application{
 		Joueur j2=new Joueur(2,"Joueur2",0);
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
 		
-		Sac sac=new Sac();
+		j1.getJetons().add(new Jeton('A'));
+		j1.getJetons().add(new Jeton('A'));
+		j1.getJetons().add(new Jeton('A'));
+		j1.getJetons().add(new Jeton('A'));
+		j1.getJetons().add(new Jeton('A'));
+		j1.getJetons().add(new Jeton('A'));
 		
+		
+		Sac sac=new Sac();
 		Plateau plateau=new Plateau();
 		
 		Partie p=new Partie(joueurs,sac,plateau);
 		FenetreJeu fj=new FenetreJeu();
 		ControllerPlateau cp =new ControllerPlateau(p,fj);
+		cp.setJoueurQuijoue(j1);
 		
 		Scene scene=new Scene(fj);
 		stage.setScene(scene);

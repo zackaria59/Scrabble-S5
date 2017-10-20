@@ -27,6 +27,7 @@ public class PlateauV extends StackPane {
 		grid.setMaxSize(t, t);
 		taille=t;
 		initialisePlateau();
+		
 	}
 	
 	public void initialisePlateau()
@@ -41,6 +42,7 @@ public class PlateauV extends StackPane {
                 GridPane.setColumnIndex(plateau[i][y],y);
                 plateau[i][y].getRec().setStroke(Color.GRAY);
                
+                
             	grid.getChildren().add(plateau[i][y]);
             }
         }
