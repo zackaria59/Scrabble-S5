@@ -1,9 +1,11 @@
 package View;
 
 import Model.Case;
+import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -14,6 +16,7 @@ public class PlateauV extends StackPane {
 	private double taille;
 	private Tuile[][] plateau;
 	private GridPane grid=new GridPane();
+	private JetonV jetonDrag;
 	
 	public PlateauV(double t)
 	{		
@@ -28,6 +31,31 @@ public class PlateauV extends StackPane {
 		taille=t;
 		initialisePlateau();
 		this.setPickOnBounds(false);
+		grid.setPickOnBounds(false);
+		grid.setStyle("-fx-border-color: blue;\n"
+                + "-fx-border-insets: 5;\n"
+                + "-fx-border-width: 3;\n"
+                + "-fx-border-style: dashed;\n;");
+		//this.addEventFilter(MouseDragEvent.ANY,e -> System.out.println(e));
+		this.setOnMouseDragEntered(new EventHandler<MouseDragEvent>(){
+
+			@Override
+			public void handle(MouseDragEvent e) {
+				
+				//jetonDrag.setVisible(false);
+			}
+			
+		});
+		
+		this.setOnMouseDragExited(new EventHandler<MouseDragEvent>(){
+
+			@Override
+			public void handle(MouseDragEvent e) {
+				
+				//jetonDrag.setVisible(true);
+			}
+			
+		});
 	}
 	
 	public void initialisePlateau()
@@ -37,13 +65,14 @@ public class PlateauV extends StackPane {
 		for(int i=0; i<15; i++) {
             for(int y=0; y<15; y++) {
       
-            	plateau[i][y]=new Tuile((double)taille);
-                GridPane.setRowIndex(plateau[i][y],i);
-                GridPane.setColumnIndex(plateau[i][y],y);
+            	
+            	plateau[i][y]=new Tuile((double)taille,i,y);
+               GridPane.setRowIndex(plateau[i][y].getContainer(),i);
+                GridPane.setColumnIndex(plateau[i][y].getContainer(),y);
                 plateau[i][y].getRec().setStroke(Color.GRAY);
                
                 
-            	grid.getChildren().add(plateau[i][y]);
+            	grid.getChildren().add(plateau[i][y].getContainer());
             }
         }
 		initialiseTypeCase();
@@ -51,6 +80,18 @@ public class PlateauV extends StackPane {
 		
 		
 		
+	}
+	
+	public void addJetonDrag(JetonV jt)
+	{
+		jetonDrag=jt;
+		for(int i=0;i<15;i++)
+		{
+			for(int y=0;y<15;y++)
+			{
+				plateau[i][y].setJetonDrag(jt);
+			}
+		}
 	}
 	
 	public void initialiseTypeCase()
@@ -94,8 +135,8 @@ public class PlateauV extends StackPane {
 		plateau[7][3].setCouleur(Color.CORNFLOWERBLUE);
 		
 		ImageView img =new ImageView(new Image(getClass().getClassLoader().getResource("images/Etoile.png").toString(), true));
-		img.fitWidthProperty().bind(plateau[7][7].widthProperty());
-		img.fitHeightProperty().bind(plateau[7][7].heightProperty());
+		img.fitWidthProperty().bind(plateau[7][7].getContainer().widthProperty());
+		img.fitHeightProperty().bind(plateau[7][7].getContainer().heightProperty());
 		plateau[7][7].setImage(img);
 		
 		plateau[7][11].setCouleur(Color.CORNFLOWERBLUE);
@@ -138,5 +179,21 @@ public class PlateauV extends StackPane {
 	}
 
 	
+	public Tuile getPositionJeton()
+	{
+		for(int i=0;i<15;i++)
+		{
+			for(int y=0;y<15;y++)
+			{
+				if(plateau[i][y].isJetonPresent())
+				{
+					return plateau[i][y];
+					
+					
+				}
+			}
+		}
+		return null;
+	}
 
 }

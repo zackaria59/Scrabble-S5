@@ -29,33 +29,35 @@ public class Launcher extends Application{
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
 		
-		Joueur j1=new Joueur(1,"Joueur1",0);
-		Joueur j2=new Joueur(2,"Joueur2",0);
+		Joueur j1=new Joueur(1,"CR7",0);
+		Joueur j2=new Joueur(2,"Messi",0);
+		Joueur j3=new Joueur(3,"Roni",0);
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
-		
-		j1.getJetons().add(new Jeton('A'));
-		j1.getJetons().add(new Jeton('A'));
-		j1.getJetons().add(new Jeton('A'));
-		j1.getJetons().add(new Jeton('A'));
-		j1.getJetons().add(new Jeton('A'));
-		j1.getJetons().add(new Jeton('A'));
-		
+		joueurs.add(j1);
+		joueurs.add(j2);
+		joueurs.add(j3);
 		
 		Sac sac=new Sac();
 		Plateau plateau=new Plateau();
 		
+		j1.piocherDebutPartie(sac);
+		j2.piocherDebutPartie(sac);
+		j3.piocherDebutPartie(sac);
+		
+		
 		Partie p=new Partie(joueurs,sac,plateau);
 		FenetreJeu fj=new FenetreJeu();
 		ControllerPlateau cp =new ControllerPlateau(p,fj);
-		cp.setJoueurQuijoue(j1);
 		
 		Scene scene=new Scene(fj);
+		
 		stage.setScene(scene);
 		stage.setHeight(height);
 		stage.setWidth(width);
 		stage.setFullScreen(true);
 		stage.setMaximized(true);
 		stage.show();
+		
 	}
 	
 }

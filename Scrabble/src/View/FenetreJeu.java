@@ -2,7 +2,6 @@ package View;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
-
 import Controller.ControllerPlateau;
 import Model.Jeton;
 import Model.Joueur;
@@ -26,12 +25,19 @@ import javafx.stage.Stage;
 public class FenetreJeu extends StackPane{
 
 	private int largeur,hauteur;
-	private TextField motjoue;
 	private InfoJoueur ij;
 	private PlateauV p;
-	private ControllerPlateau cp;
 	private ImageView background;
+	private MenuCommande mc;
 	
+
+	public MenuCommande getMc() {
+		return mc;
+	}
+
+	public void setMc(MenuCommande mc) {
+		this.mc = mc;
+	}
 
 	public PlateauV getP() {
 		return p;
@@ -46,35 +52,27 @@ public class FenetreJeu extends StackPane{
 		
 		// On récupère la résolution de l'écran
 		
-		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
 		largeur=width;
 		hauteur=height;
 		
-		background=new ImageView(getClass().getClassLoader().getResource("images/background.jpeg").toString());
+		background=new ImageView(getClass().getClassLoader().getResource("images/background.jpg").toString());
 		background.setFitHeight(hauteur);
 		background.setFitWidth(largeur);
+		background.setPickOnBounds(false);
 		
-		p=new PlateauV(largeur*0.41);
+		p=new PlateauV(largeur*0.47);
 		p.setTranslateX(largeur*0.08);
-		p.setTranslateY(-hauteur*0.05);
+		p.setTranslateY(0);
+		p.setPickOnBounds(false);
 		
 		
-		motjoue=new TextField("");
-		motjoue.setMaxWidth(largeur*0.35);
-		motjoue.setMaxHeight(hauteur*0.05);
-		motjoue.setTranslateY(hauteur*0.43);
-		motjoue.setFocusTraversable(false);
-		motjoue.setPromptText("Entrée un mot");
-		motjoue.autosize();
-		motjoue.setPickOnBounds(false);
-		
-		MenuCommande mc=new MenuCommande(height,width);
+		mc=new MenuCommande(height,width);
 		//mc.setTranslateY(height*0.2);
 		mc.setTranslateX(width*0.07);
-		mc.setTranslateY(height*0.25);
+		mc.setTranslateY(height*0.20);
 		mc.setAlignment(Pos.CENTER_LEFT);
 		mc.setPickOnBounds(false);
 		
@@ -85,14 +83,14 @@ public class FenetreJeu extends StackPane{
 		//ij.afficheInfoJetons();
 		ij.afficheNom("Killua");
 		ij.setPickOnBounds(false);
-		ij.setTranslateX(-largeur*0.35);
-		ij.setTranslateY(-hauteur*0.25);
+		ij.setTranslateX(0);
+		ij.setTranslateY(0);
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
-		this.getChildren().addAll(background,motjoue,p,ij,mc);
-	
+		
 		
 	
 		
+		this.getChildren().addAll(background,p,ij,mc);
 	
 	}
 	
@@ -131,11 +129,11 @@ public class FenetreJeu extends StackPane{
 		ij.setControllerJetonV(cp);
 	}
 	
-	public static void main(String[] args)
+	public void melangeJetons(Joueur j)
 	{
-		
-		
-		
+		ij.viderJetons();
+		ij.afficheInfoJetons(genereJetonV(j.getJetons()));
 	}
+	
 
 }
