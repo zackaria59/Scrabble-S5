@@ -82,6 +82,17 @@ public class Joueur implements Serializable {
 		}
 	}
 	
+	public void removeJetonByChar(char c)
+	{
+		for(int i=0;i<jetons.size();i++)
+		{
+			if(jetons.get(i).getLettre()==c)
+			{
+				jetons.remove(i);
+			}
+		}
+	}
+	
 	public String getPseudo(){
 		return pseudo;
 	}

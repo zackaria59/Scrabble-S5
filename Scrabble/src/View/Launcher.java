@@ -35,7 +35,7 @@ public class Launcher extends Application{
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
 		joueurs.add(j1);
 		joueurs.add(j2);
-		joueurs.add(j3);
+		//joueurs.add(j3);
 		
 		Sac sac=new Sac();
 		Plateau plateau=new Plateau();
@@ -43,6 +43,9 @@ public class Launcher extends Application{
 		j1.piocherDebutPartie(sac);
 		j2.piocherDebutPartie(sac);
 		j3.piocherDebutPartie(sac);
+		
+		j1.piocherDebutPartie(sac);
+		j2.piocherDebutPartie(sac);
 		
 		
 		Partie p=new Partie(joueurs,sac,plateau);
@@ -57,6 +60,7 @@ public class Launcher extends Application{
 		stage.setFullScreen(true);
 		stage.setMaximized(true);
 		stage.show();
+		
 		
 	}
 	

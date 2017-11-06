@@ -22,16 +22,13 @@ public class JetonV extends StackPane {
 		 
 		 this.setLettre(lettre);
 		 image=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+lettre+".png").toString());
-		 image.setFitHeight(60);
-	     image.setFitWidth(60);
+		 image.setFitHeight(40);
+	     image.setFitWidth(40);
 	  
 	     this.setMaxSize(60, 60);
 		 this.getChildren().add(image);
 		 this.setPickOnBounds(false);
-		this.setStyle("-fx-border-color: blue;\n"
-                + "-fx-border-insets: 5;\n"
-                + "-fx-border-width: 3;\n"
-                + "-fx-border-style: dashed;\n;");
+		
 		 
 	
 		 	this.setOnMousePressed(event -> {
@@ -88,5 +85,12 @@ public class JetonV extends StackPane {
 		this.lettre = lettre;
 	}
 
+	public void aggrandir()
+	{
+		this.setMaxHeight(200);
+		this.setMaxWidth(200);
+		this.setWidth(200);
+		this.setHeight(200);
+	}
 	
 }

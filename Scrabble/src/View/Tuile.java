@@ -26,7 +26,7 @@ public class Tuile  {
 	private JetonV jetonDrag;
 	private ImageView img;
 	private Boolean jetonPresent=false;
-	private char c;
+	private char c='1';
 	
 	
 	public Tuile(double taille,int x,int y)
@@ -50,7 +50,7 @@ public class Tuile  {
         rec.setFill(Color.web("rgb(255,255,255)"));
         
         couleur=Color.WHITE;
-      rec.addEventFilter(MouseDragEvent.ANY,e -> System.out.println(e));
+      //rec.addEventFilter(MouseDragEvent.ANY,e -> System.out.println(e));
         
 		container=new StackPane();
         
@@ -60,17 +60,18 @@ public class Tuile  {
 
 			@Override
 			public void handle(MouseDragEvent e) {
-			
-				if(jetonPresent)
+			//System.out.println(c+" JetonPresent="+jetonPresent);
+				
+			if(c!='1')
 				{
 					rec.setFill(Color.RED);
 				}
 				else{
 				rec.setFill(Color.LIGHTGREEN);
-				
+				///// modificaton sur la taille de la case
 				img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+jetonDrag.getLettre()+".png").toString());
-				img.setFitHeight(taille/17);
-				img.setFitWidth(taille/17);
+				img.setFitHeight(taille/60);
+				img.setFitWidth(taille/60);
 				container.getChildren().add(img);
 				
 				jetonPresent=true;
@@ -174,6 +175,14 @@ public class Tuile  {
 		return x;
 	}
 
+	public Boolean getJetonPresent() {
+		return jetonPresent;
+	}
+
+	public void setJetonPresent(Boolean jetonPresent) {
+		this.jetonPresent = jetonPresent;
+	}
+
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -185,5 +194,14 @@ public class Tuile  {
 	public void setC(char c) {
 		this.c = c;
 	}
+	
+	public ImageView getImg() {
+		return img;
+	}
+
+	public void setImg(ImageView img) {
+		this.img = img;
+	}
+
 	
 }

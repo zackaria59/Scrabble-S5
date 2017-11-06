@@ -42,7 +42,7 @@ public class BoutonCustom extends HBox {
         	rec.setEffect(null);
         });
      
-       cir=new Circle(hauteur*0.115,c);
+       cir=new Circle(hauteur*0.100,c);
         cir.setOnMouseEntered(event ->{
         	DropShadow ds = new DropShadow();
             ds.setOffsetY(10.0);
@@ -51,14 +51,14 @@ public class BoutonCustom extends HBox {
         	cir.setEffect(ds);
         	
         });
-        
+        	
         cir.setOnMouseExited(event ->{
         	cir.setEffect(null);
         });
         
        img=new ImageView(getClass().getClassLoader().getResource("images/"+nom+".png").toString());
-       img.setFitHeight(hauteur*0.15);
-       img.setFitWidth(hauteur*0.15);
+       img.setFitHeight(hauteur*0.10);
+       img.setFitWidth(hauteur*0.10);
        img.setTranslateX(-largeur*0.175);
        img.setTranslateY(hauteur*0.038);
         

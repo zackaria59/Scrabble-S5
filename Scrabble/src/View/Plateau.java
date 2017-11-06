@@ -35,11 +35,11 @@ public class Plateau extends StackPane {
 		for(int l=0; l<15; l++) {
             for(int col=0; col<15; col++) {
       
-                plateau[l][col]=new Tuile((double)taille);
+                plateau[l][col]=new Tuile((double)taille,l,col);
                 
-                GridPane.setRowIndex(plateau[l][col],l);
-                GridPane.setColumnIndex(plateau[l][col],col);
-                grid.getChildren().addAll(plateau[l][col]);
+                GridPane.setRowIndex(plateau[l][col].getContainer(),l);
+                GridPane.setColumnIndex(plateau[l][col].getContainer(),col);
+                grid.getChildren().addAll(plateau[l][col].getContainer());
                  
             }
         }

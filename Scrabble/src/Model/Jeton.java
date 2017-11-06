@@ -6,13 +6,16 @@ import java.io.Serializable;
 
 public class Jeton implements Serializable {
 	
-	private int id;
+	private int id,x,y;
 	private char lettre;
 	private int points;  // Le nombre de point que rapporte la lettre
+	private boolean valide;
+	
 	
 	public Jeton(char l)
 	{
 		lettre=l;
+		valide=false;
 		intialisePoint();
 	}
 
@@ -72,6 +75,30 @@ public class Jeton implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isValide() {
+		return valide;
+	}
+
+	public void setValide(boolean valide) {
+		this.valide = valide;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 	
 }

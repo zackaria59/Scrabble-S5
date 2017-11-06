@@ -29,6 +29,7 @@ public class FenetreJeu extends StackPane{
 	private PlateauV p;
 	private ImageView background;
 	private MenuCommande mc;
+	private PiocheJeton pj;
 	
 
 	public MenuCommande getMc() {
@@ -85,15 +86,21 @@ public class FenetreJeu extends StackPane{
 		ij.setPickOnBounds(false);
 		ij.setTranslateX(0);
 		ij.setTranslateY(0);
+		
+		//pj=new PiocheJeton(1080,1900);
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
-		
-		
-	
-		
 		this.getChildren().addAll(background,p,ij,mc);
 	
 	}
 	
+	public PiocheJeton getPj() {
+		return pj;
+	}
+
+	public void setPj(PiocheJeton pj) {
+		this.pj = pj;
+	}
+
 	public InfoJoueur getIj() {
 		return ij;
 	}
@@ -133,6 +140,11 @@ public class FenetreJeu extends StackPane{
 	{
 		ij.viderJetons();
 		ij.afficheInfoJetons(genereJetonV(j.getJetons()));
+	}
+	
+	public void affichePremierJoueur(ArrayList ls)
+	{
+		this.pj.affichePioche(ls);
 	}
 	
 

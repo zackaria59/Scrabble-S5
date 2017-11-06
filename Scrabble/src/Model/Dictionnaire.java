@@ -11,26 +11,30 @@ public class Dictionnaire {
 
 	
 	private BufferedReader dictionnaire;
+	private String file;
 	
 	public Dictionnaire(String file) throws FileNotFoundException
 	{
+		this.file=file;
 		dictionnaire = new BufferedReader(new FileReader(file));
 	}
 	
 	public boolean verifieMotValide(String mot) throws IOException  // String vérifie si un "mot" est présent dans le dictionnaire 
 	{
 		String motDico;
-		System.out.println(mot);
+		
 		mot = mot.substring(0,mot.length()).toUpperCase(); // Transforme le "mot" en majuscule car tout les mots du dico sont en majuscule 
-		System.out.println(mot);
-			
+		System.out.print("Mot dans la fonction dico : |"+mot+"|\n");
 		try {
 				
 				while ( (motDico = dictionnaire.readLine()) != null )
 				{
-					System.out.println(motDico);
+					//System.out.println(mot +"="+ motDico+" ??" );
+					
 					if (mot.equals(motDico))
-					{
+					{	
+						System.out.println("MOT TROUVE DANS LE DICO !!!!!!!!!!!!");
+						dictionnaire = new BufferedReader(new FileReader(file));
 						return true;
 					}
 
@@ -40,7 +44,7 @@ public class Dictionnaire {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+		dictionnaire = new BufferedReader(new FileReader(file));
 			return false;
 	}
 	

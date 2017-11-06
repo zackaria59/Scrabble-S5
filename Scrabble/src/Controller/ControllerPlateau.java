@@ -1,6 +1,7 @@
 package Controller;
 
 import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,6 +18,8 @@ import View.PlateauV;
 import View.Tuile;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +33,9 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	private FenetreJeu fj;
 	private JetonV jetonv;
 	private final Point pos = new Point();
+	private boolean premierTour;
+	
+	private ArrayList<Tuile> postionJetonPose=new ArrayList<Tuile>();
 	
 	
 	public ControllerPlateau(Partie partie,FenetreJeu fj)
@@ -38,6 +44,15 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		this.fj=fj;
 		fj.getMc().addControllers(this);
 		setJoueurQuijoue(partie.getJoueurs().get(0));
+		premierTour=true;
+		//DesignePremierJoueur();
+	}
+	
+	public void DesignePremierJoueur()
+	{
+		ArrayList<Object> result=partie.designePremierJoueur();
+		
+		fj.getPj().affichePioche(result);
 	}
 	
 	public Partie getPartie() {
@@ -64,11 +79,42 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		partie.setJoueurJoueTour(true);
 	}
 	
+	public void passeTour()
+	{
+		partie.videList();
+		this.postionJetonPose.clear();
+		this.setJoueurQuijoue(partie.nextJoueur());
+		fj.getMc().activerBoutonMelanger();
+		fj.getMc().activerBoutonPasser();
+	}
 	
 	public void melanger()
 	{
 		Collections.shuffle(partie.getJoueurQuiJoue().getJetons());
-		fj.melangeJetons(partie.getJoueurQuiJoue());
+		this.setJoueurQuijoue(partie.getJoueurQuiJoue());
+	}
+	
+	public void reprendre()
+	{
+		for(Tuile t:this.postionJetonPose)
+		{
+			if(t.getX()==7 && t.getY()==7)
+			{
+				t.getContainer().getChildren().remove(2);
+			}
+			else{
+			t.getContainer().getChildren().remove(1);
+			}
+			
+			Jeton jt=new Jeton(t.getC());
+			t.setC('1');
+			partie.getJoueurQuiJoue().getJetons().add(jt);
+		}
+		this.postionJetonPose.clear();
+		
+		this.setJoueurQuijoue(partie.getJoueurQuiJoue());
+		fj.getMc().activerBoutonMelanger();
+		fj.getMc().activerBoutonPasser();
 	}
 	
 
@@ -88,9 +134,62 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 			{
 				this.setJoueurQuijoue(partie.nextJoueur());
 			}
+			else if(((BoutonCustom) o).getT().getText().equals("Jouer"))
+			{
+				if(this.premierTour)
+				{
+					try {
+						if(partie.jouePremierTour())
+						{
+							partie.validJetonPose();
+							passeTour();
+							premierTour=false;
+						}
+						else{
+							
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Information Dialog");
+							alert.setHeaderText(null);
+							alert.setContentText("Pas bon");
+
+							alert.showAndWait();
+							this.partie.videList();
+							this.reprendre();
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				} else
+					try {
+						if(partie.joueUnTour())
+						{
+							partie.validJetonPose();
+							passeTour();
+							premierTour=false;
+						}
+						else{
+							
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Information Dialog");
+							alert.setHeaderText(null);
+							alert.setContentText("Pas bon");
+
+							alert.showAndWait();
+							this.partie.videList();
+							this.reprendre();
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+			}
 			else if(((BoutonCustom) o).getT().getText().equals("Reprendre"))
 			{
-				
+				reprendre();
+				partie.getPlateau().reprendre();
 			}
 			else if(((BoutonCustom) o).getT().getText().equals("Dictionnaire"))
 			{
@@ -109,20 +208,24 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 				
 				if( t instanceof Tuile)
 				{
-					System.out.println("Jeton dans tuile");
-					JetonV jt=((JetonV) o);
+					((Tuile) t).setJetonPresent(true);
 					
+					JetonV jt=((JetonV) o);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////				
 					ImageView img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+jt.getLettre()+".png").toString());
-					img.setFitHeight(900/17);
-					img.setFitWidth(900/17);
+					img.setFitHeight(900/25);
+					img.setFitWidth(900/25);
+					
 					((Tuile)t).getContainer().getChildren().add(img);
+					((Tuile) t).setC(jt.getLettre());
+					this.postionJetonPose.add((Tuile) t);
 					
 					partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
-					//partie.getPlateau().getPlateau()[((Tuile) t).getX()][((Tuile) t).getY()].setP(new Jeton(jt.getLettre()));
-					
+					partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre());
 					
 					fj.getMc().activerBoutonReprendre();
 					jt.setVisible(false);
+					fj.getMc().activerBoutonJouer();
 				}
 			}
 			

@@ -64,4 +64,22 @@ public class MenuCommande extends VBox {
 		//Mettre icone au bouton
 	}
 	
+	public void activerBoutonMelanger()
+	{
+		b1.getT().setText("Melanger");
+		//Mettre icone au bouton
+	}
+	
+	public void activerBoutonJouer()
+	{
+		b3.getT().setText("Jouer");
+		//Mettre icone au bouton
+	}
+	
+	public void activerBoutonPasser()
+	{
+		b3.getT().setText("Passer");
+		//Mettre icone au bouton
+	}
+	
 }
