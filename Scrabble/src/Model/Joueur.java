@@ -99,6 +99,7 @@ public class Joueur implements Serializable {
 			if(jetons.get(i).getLettre()==c)
 			{
 				jetons.remove(i);
+				break;
 			}
 		}
 	}
