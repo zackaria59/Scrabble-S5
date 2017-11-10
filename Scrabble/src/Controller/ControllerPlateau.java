@@ -240,8 +240,8 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 					else{
 						
 					ImageView img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+jt.getLettre()+".png").toString());
-					img.setFitHeight(900/17);
-					img.setFitWidth(900/17);
+					img.setFitHeight(((Tuile) t).getRec().getHeight()-1);
+					img.setFitWidth(((Tuile) t).getRec().getWidth()-1);
 					((Tuile)t).getContainer().getChildren().add(img);
 					
 					

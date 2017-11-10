@@ -49,6 +49,7 @@ public class Launcher extends Application{
 		FenetreJeu fj=new FenetreJeu();
 		ControllerPlateau cp =new ControllerPlateau(p,fj);
 		
+		
 		Scene scene=new Scene(fj);
 		
 		stage.setScene(scene);
