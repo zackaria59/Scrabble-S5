@@ -68,10 +68,10 @@ public class Tuile  {
 				}
 				else{
 				rec.setFill(Color.LIGHTGREEN);
-				///// modificaton sur la taille de la case
+				
 				img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+jetonDrag.getLettre()+".png").toString());
-				img.setFitHeight(taille/60);
-				img.setFitWidth(taille/60);
+				img.setFitHeight(taille/17);
+				img.setFitWidth(taille/17);
 				container.getChildren().add(img);
 				
 				jetonPresent=true;

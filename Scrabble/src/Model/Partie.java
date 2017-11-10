@@ -12,6 +12,7 @@ public class Partie {
 	private Sac sac;
 	private Plateau plateau;
 	private Dictionnaire dico;
+	private String erreurMsg;
 
 	private boolean joueurJoueTour;
 	
@@ -176,13 +177,29 @@ public class Partie {
 			System.out.println("mot Impec");
 			return true;
 		}
-		else if(dico.verifieMotValide(mot2)){
-			
-			System.out.println("mot Impec2");
-			return true;
-		}
 		else{ return false;}
 		
+	}
+	
+	public boolean verifMotVoisinValide() throws IOException
+	{
+
+		LinkedList<Object> mots =this.getPlateau().chercheToutLesMotsVoisin();
+		LinkedList<Jeton> mot=new LinkedList<Jeton>();
+		for(int i=0;i<mots.size();i++)
+		{
+			mot=((LinkedList<Jeton>)mots.get(i));
+			System.out.print(this.getMotByList(mot));
+			
+			if(!verifMotValide(mot))
+			{
+				erreurMsg="Le mot suivant n'est pas valide : "+this.getMotByList(mot);
+				System.out.println(erreurMsg);
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	public String inverse(String s){ 
@@ -215,6 +232,8 @@ public class Partie {
 		
 		if(verifMotValide(getPlateau().jouePremierTour()))
 		{
+			int nbJetonPose=this.getPlateau().getJetonNoValide().size();
+			this.getJoueurQuiJoue().piocherNbFois(nbJetonPose,sac);
 			return true;
 		}
 		else{
@@ -226,15 +245,32 @@ public class Partie {
 	
 	public boolean joueUnTour() throws IOException
 	{
-		if(verifMotValide(this.getPlateau().getMotPose()))
+		
+		if(verifMotValide(this.getPlateau().getMotPose()) && verifMotVoisinValide())
 			{
+				
+			int nbJetonPose=this.getPlateau().getJetonNoValide().size();
+			this.getJoueurQuiJoue().piocherNbFois(nbJetonPose,sac);
+			
 			System.out.print(" ============================================= >>>> MOT OK <<<<< =======================================");
 				return true;
 			}
 		else{
+			
 			System.out.print(" ============================================= >>>> MOT INVALIDE <<<<< =======================================");
 				return false;
 		}
+	}
+	
+	public String getMotByList(LinkedList<Jeton> motList)
+	{
+		String mot="";
+		for(int i=0;i<motList.size();i++)
+		{
+			mot+=motList.get(i).getLettre();
+		}
+		
+		return mot;
 	}
 	
 	public void validJetonPose()

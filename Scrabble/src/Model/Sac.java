@@ -46,7 +46,7 @@ public class Sac implements Serializable {
 		ajouteJetonsAuSac('X',1);
 		ajouteJetonsAuSac('Y',1);
 		ajouteJetonsAuSac('Z',1);
-		ajouteJetonsAuSac('?',2);
+		ajouteJetonsAuSac('^',2);
 		
 	}
 	

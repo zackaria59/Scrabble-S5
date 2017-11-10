@@ -21,15 +21,25 @@ public class Joueur implements Serializable {
 	
 	public void piocher(Sac sac)    // Le joueur tire un jeton du sac 
 	{
-		int nbAleatoire=(int) (Math.random() * ( sac.getJetons().size() - 0 ));
-		jetons.add(sac.getJetons().get(nbAleatoire));                // on ajoute le jeton dans la liste de jeton du joueur
-		sac.getJetons().remove(nbAleatoire);						 // puis on supprime le jeton du sac 
+		
+		jetons.add(piocherUnJeton(sac));                // on ajoute le jeton dans la liste de jeton du joueur
+								 
 	}
 	
 	public Jeton piocherUnJeton(Sac sac)
 	{
 		int nbAleatoire=(int) (Math.random() * ( sac.getJetons().size() - 0 ));
-		return sac.getJetons().get(nbAleatoire);
+		Jeton jt=sac.getJetons().get(nbAleatoire);
+		sac.getJetons().remove(nbAleatoire);
+		return jt;
+	}
+	
+	public void piocherNbFois(int nb,Sac sac)
+	{
+		for(int i=0;i<nb;i++)
+		{
+			piocher(sac);
+		}
 	}
 	
 	public void piocherDebutPartie(Sac sac)

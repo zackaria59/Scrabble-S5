@@ -16,6 +16,8 @@ import View.FenetreJeu;
 import View.JetonV;
 import View.PlateauV;
 import View.Tuile;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -33,7 +35,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	private FenetreJeu fj;
 	private JetonV jetonv;
 	private final Point pos = new Point();
-	private boolean premierTour;
+	private boolean premierTour,lettreJokerChoisi;
+	private char lettrejokChoisi;
+	
+	private Tuile tuileJetonJoker;
+	
 	
 	private ArrayList<Tuile> postionJetonPose=new ArrayList<Tuile>();
 	
@@ -43,8 +49,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		this.partie=partie;
 		this.fj=fj;
 		fj.getMc().addControllers(this);
+		fj.getJcl().addControllerJetonV(this);
 		setJoueurQuijoue(partie.getJoueurs().get(0));
 		premierTour=true;
+		lettreJokerChoisi=false;
+		
 		//DesignePremierJoueur();
 	}
 	
@@ -108,8 +117,10 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 			
 			Jeton jt=new Jeton(t.getC());
 			t.setC('1');
+			System.out.println(jt.getLettre());
 			partie.getJoueurQuiJoue().getJetons().add(jt);
 		}
+		
 		this.postionJetonPose.clear();
 		
 		this.setJoueurQuijoue(partie.getJoueurQuiJoue());
@@ -190,15 +201,19 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 			{
 				reprendre();
 				partie.getPlateau().reprendre();
+				
+				
 			}
 			else if(((BoutonCustom) o).getT().getText().equals("Dictionnaire"))
 			{
-				fj.getChildren().add(new Dictionnaire(1920,1080));
+				fj.getDico().setVisible(true);
 			}
 			
 		}
 		else if(o instanceof JetonV)
 		{
+			
+			
 			fj.getP().addJetonDrag(((JetonV)o));
 			
 			if(e.getEventType().equals(MouseEvent.MOUSE_RELEASED))
@@ -208,27 +223,70 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 				
 				if( t instanceof Tuile)
 				{
+					
+					
+						
 					((Tuile) t).setJetonPresent(true);
 					
 					JetonV jt=((JetonV) o);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////				
-					ImageView img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+jt.getLettre()+".png").toString());
-					img.setFitHeight(900/25);
-					img.setFitWidth(900/25);
 					
+					if(jt.getLettre()=='^')
+					{
+						this.fj.getJcl().getSp().setVisible(true);
+						this.fj.getJcl().animation();
+						tuileJetonJoker=(Tuile) t;
+						
+					}
+					else{
+						
+					ImageView img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+jt.getLettre()+".png").toString());
+					img.setFitHeight(900/17);
+					img.setFitWidth(900/17);
 					((Tuile)t).getContainer().getChildren().add(img);
+					
+					
 					((Tuile) t).setC(jt.getLettre());
 					this.postionJetonPose.add((Tuile) t);
-					
 					partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
 					partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre());
+					}
+					
 					
 					fj.getMc().activerBoutonReprendre();
 					jt.setVisible(false);
 					fj.getMc().activerBoutonJouer();
 				}
 			}
-			
+			else if(e.getEventType().equals(MouseEvent.MOUSE_CLICKED))
+			{
+				if(((JetonV)o).isJetonPourJoker())
+				{
+					this.lettrejokChoisi=((JetonV)o).getLettre();
+					System.out.println("a clicke sur un jeton joker");
+					this.lettreJokerChoisi=true;
+					
+					ImageView img=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+this.lettrejokChoisi+".png").toString());
+					img.setFitHeight(900/17);
+					img.setFitWidth(900/17);
+					tuileJetonJoker.getContainer().getChildren().add(img);
+					
+					tuileJetonJoker.setC('^');
+					this.postionJetonPose.add((Tuile) tuileJetonJoker);
+					
+					partie.getJoueurQuiJoue().removeJetonByChar('^');
+					partie.getPlateau().setJeton(tuileJetonJoker.getX(),tuileJetonJoker.getY(), lettrejokChoisi);
+					
+					this.fj.getJcl().getSp().setVisible(false);
+				}
+			}
+			else if(e.getEventType().equals(MouseEvent.MOUSE_ENTERED))
+			{
+				((JetonV)o).effectSelection();
+			}
+			else if(e.getEventType().equals(MouseEvent.MOUSE_EXITED))
+			{
+				((JetonV)o).RetirerEffectSelection();
+			}
 		}
 		
 		

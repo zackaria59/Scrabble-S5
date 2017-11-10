@@ -96,6 +96,7 @@ public class PlateauV extends StackPane {
 	
 	public void initialiseTypeCase()
 	{
+		
 		plateau[0][0].setCouleur(Color.RED);
 		plateau[0][3].setCouleur(Color.CORNFLOWERBLUE);
 		plateau[0][7].setCouleur(Color.RED);
