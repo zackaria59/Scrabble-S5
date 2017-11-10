@@ -39,8 +39,8 @@ public class JetonV extends StackPane {
 		 	
 		 		if(!this.jetonPourJoker){
 		 			image.setMouseTransparent(true);
-		        Xinitiale=this.getLayoutX();
-		        Yinitiale=this.getLayoutY();
+		        Xinitiale=image.getLayoutX();
+		        Yinitiale=image.getLayoutY();
 		        
 		        dragDeltaX = this.getLayoutX() + event.getX();
 		        dragDeltaY = this.getLayoutY() + event.getY();
@@ -60,8 +60,8 @@ public class JetonV extends StackPane {
 
 		    this.setOnMouseDragged(event -> {
 		    	
-		    	image.setTranslateX(event.getSceneX() - dragDeltaX -30);
-		        image.setTranslateY(event.getSceneY() - dragDeltaY -30);
+		    	this.setTranslateX(event.getSceneX() - dragDeltaX -30);
+		        this.setTranslateY(event.getSceneY() - dragDeltaY -30);
 		        event.setDragDetect(false);
 		    });
 
@@ -82,6 +82,26 @@ public class JetonV extends StackPane {
 		 
    }
 	
+	public void setImage(ImageView image) {
+		this.image = image;
+	}
+
+	public double getXinitiale() {
+		return Xinitiale;
+	}
+
+	public void setXinitiale(double xinitiale) {
+		Xinitiale = xinitiale;
+	}
+
+	public double getYinitiale() {
+		return Yinitiale;
+	}
+
+	public void setYinitiale(double yinitiale) {
+		Yinitiale = yinitiale;
+	}
+
 	public void effectSelection()
 	{
 		this.setRotate(25);

@@ -16,6 +16,8 @@ import View.FenetreJeu;
 import View.JetonV;
 import View.PlateauV;
 import View.Tuile;
+import javafx.animation.PathTransition;
+import javafx.animation.TranslateTransition;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -25,7 +27,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class ControllerPlateau implements EventHandler<MouseEvent>{
 
@@ -223,9 +229,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 				
 				if( t instanceof Tuile)
 				{
-					
-					
-						
+
 					((Tuile) t).setJetonPresent(true);
 					
 					JetonV jt=((JetonV) o);
@@ -255,6 +259,15 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 					fj.getMc().activerBoutonReprendre();
 					jt.setVisible(false);
 					fj.getMc().activerBoutonJouer();
+				}
+				else{
+					
+					TranslateTransition tt=new TranslateTransition();
+					tt.setToX(((JetonV) o).getXinitiale());
+					tt.setToY(((JetonV) o).getYinitiale());
+					tt.setByY(1);
+					tt.setNode((JetonV)o);	
+					tt.play();
 				}
 			}
 			else if(e.getEventType().equals(MouseEvent.MOUSE_CLICKED))

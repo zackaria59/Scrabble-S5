@@ -738,44 +738,50 @@ public class Plateau implements Serializable {
 
 		System.out.println("Mot en colonne : " + this.motEnColonne);
 
-		if ((plateau[x - 1][y].jetonValide() || plateau[x + 1][y].jetonValide()) && !motEnColonne) {
-			xt = x;
-			mot1 = new LinkedList<Jeton>();
-			mot1.add(jt);
-
-			while (plateau[xt - 1][y].jetonValide()) {
-				mot1.addFirst(plateau[xt - 1][y].getJ());
-				xt--;
+		if(x!=0 && x!=14)
+		{
+			if ((plateau[x - 1][y].jetonValide() || plateau[x + 1][y].jetonValide()) && !motEnColonne) {
+				xt = x;
+				mot1 = new LinkedList<Jeton>();
+				mot1.add(jt);
+	
+				while (plateau[xt - 1][y].jetonValide()) {
+					mot1.addFirst(plateau[xt - 1][y].getJ());
+					xt--;
+				}
+				xt = x;
+	
+				while (plateau[xt + 1][y].jetonValide()) {
+					mot1.addLast(plateau[xt + 1][y].getJ());
+					xt++;
+				}
+	
+				mot = mot1;
 			}
-			xt = x;
-
-			while (plateau[xt + 1][y].jetonValide()) {
-				mot1.addLast(plateau[xt + 1][y].getJ());
-				xt++;
-			}
-
-			mot = mot1;
 		}
 
-		if ((plateau[x][y - 1].jetonValide() || plateau[x][y + 1].jetonValide()) && !motEnLigne) {
-			yt = y;
-			mot2 = new LinkedList<Jeton>();
-			mot2.add(jt);
-
-			while (plateau[x][yt - 1].jetonValide()) {
-				mot2.addFirst(plateau[x][yt - 1].getJ());
-				yt--;
+		if(y!=0 && y!=14)
+		{
+			if ((plateau[x][y - 1].jetonValide() || plateau[x][y + 1].jetonValide()) && !motEnLigne) {
+				yt = y;
+				mot2 = new LinkedList<Jeton>();
+				mot2.add(jt);
+	
+				while (plateau[x][yt - 1].jetonValide()) {
+					mot2.addFirst(plateau[x][yt - 1].getJ());
+					yt--;
+				}
+	
+				yt = y;
+				while (plateau[x][yt + 1].jetonValide()) {
+					mot2.addLast(plateau[x][yt + 1].getJ());
+					yt++;
+				}
+	
+				mot = mot2;
 			}
-
-			yt = y;
-			while (plateau[x][yt + 1].jetonValide()) {
-				mot2.addLast(plateau[x][yt + 1].getJ());
-				yt++;
-			}
-
-			mot = mot2;
 		}
-
+		
 		return mot;
 
 	}
