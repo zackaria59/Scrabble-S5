@@ -79,5 +79,19 @@ public class Sac implements Serializable {
 		this.nbJetons = nbJetons;
 	}
 	
+	public int getNbOccurence(char c)
+	{
+		int cpt=0;
+		
+		for(int i=0;i<this.getJetons().size();i++)
+		{
+			if(this.getJetons().get(i).getLettre()==c)
+			{
+				cpt++;
+			}
+		}
+		
+		return cpt;
+	}
 
 }

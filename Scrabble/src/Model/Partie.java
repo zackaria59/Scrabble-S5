@@ -26,6 +26,14 @@ public class Partie {
 
 	}
 
+	public Sac getSac() {
+		return sac;
+	}
+
+	public void setSac(Sac sac) {
+		this.sac = sac;
+	}
+
 	public ArrayList<Joueur> getJoueurs() {
 		return joueurs;
 	}

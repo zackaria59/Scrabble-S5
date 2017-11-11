@@ -32,10 +32,19 @@ public class FenetreJeu extends StackPane{
 	private PiocheJeton pj;
 	private JokerChoixLettre jcl;
 	private Dictionnaire dico;
+	private EchangerV ev;
 	
 
 	public Dictionnaire getDico() {
 		return dico;
+	}
+
+	public EchangerV getEv() {
+		return ev;
+	}
+
+	public void setEv(EchangerV ev) {
+		this.ev = ev;
 	}
 
 	public void setDictionnaire(Dictionnaire dictionnaire) {
@@ -111,10 +120,14 @@ public class FenetreJeu extends StackPane{
 		jcl=new JokerChoixLettre(hauteur,largeur);
 		jcl.getSp().setVisible(false);
 		
+		ev=new EchangerV(largeur,hauteur);
+		ev.setVisible(false);
+		
 		dico=new Dictionnaire(largeur,hauteur);
 		dico.setVisible(false);
+		
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
-		this.getChildren().addAll(background,p,ij,mc,jcl.getSp(),dico);
+		this.getChildren().addAll(background,p,ij,mc,jcl.getSp(),dico,ev);
 	
 	}
 	

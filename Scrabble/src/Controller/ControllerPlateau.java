@@ -54,8 +54,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	{
 		this.partie=partie;
 		this.fj=fj;
+		
 		fj.getMc().addControllers(this);
 		fj.getJcl().addControllerJetonV(this);
+		fj.getEv().setCp(this);
+		
 		setJoueurQuijoue(partie.getJoueurs().get(0));
 		premierTour=true;
 		lettreJokerChoisi=false;
@@ -134,6 +137,21 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		fj.getMc().activerBoutonPasser();
 	}
 	
+	public void echanger()
+	{
+		ArrayList<JetonV> jetonsSelectionne=this.fj.getEv().getJetonSelectionne();
+		
+		for(JetonV jtv:jetonsSelectionne)
+		{
+			partie.getSac().getJetons().add(new Jeton(jtv.getLettre()));
+			partie.getJoueurQuiJoue().removeJetonByChar(jtv.getLettre());
+			partie.getJoueurQuiJoue().piocher(partie.getSac());
+			
+		}
+		
+		reprendre();
+		passeTour();
+	}
 
 	@Override
 	public void handle(MouseEvent e) {
@@ -214,6 +232,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 			{
 				fj.getDico().setVisible(true);
 			}
+			else if(((BoutonCustom) o).getT().getText().equals("Echanger"))
+			{
+				fj.getEv().setInformation(partie.getSac(),partie.getJoueurQuiJoue());
+				fj.getEv().setVisible(true);
+			}
 			
 		}
 		else if(o instanceof JetonV)
@@ -272,6 +295,8 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 			}
 			else if(e.getEventType().equals(MouseEvent.MOUSE_CLICKED))
 			{
+				System.out.println("Hi"+((JetonV) o).isJetonPourEchanger());
+				
 				if(((JetonV)o).isJetonPourJoker())
 				{
 					this.lettrejokChoisi=((JetonV)o).getLettre();
@@ -290,6 +315,20 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 					partie.getPlateau().setJeton(tuileJetonJoker.getX(),tuileJetonJoker.getY(), lettrejokChoisi);
 					
 					this.fj.getJcl().getSp().setVisible(false);
+				}
+				else if(((JetonV) o).isJetonPourEchanger())
+				{
+
+					if(((JetonV) o).isSelectionnePourEchange())
+					{
+						((JetonV) o).setSelectionnePourEchange(false);
+						((JetonV) o).setTranslateY(0);
+					}
+					else
+					{
+						((JetonV) o).setSelectionnePourEchange(true);
+						((JetonV) o).setTranslateY(-60);
+					}
 				}
 			}
 			else if(e.getEventType().equals(MouseEvent.MOUSE_ENTERED))

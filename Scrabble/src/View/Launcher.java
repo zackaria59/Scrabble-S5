@@ -32,6 +32,7 @@ public class Launcher extends Application{
 		Joueur j1=new Joueur(1,"CR7",0);
 		Joueur j2=new Joueur(2,"Messi",0);
 		Joueur j3=new Joueur(3,"Roni",0);
+		
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
 		joueurs.add(j1);
 		joueurs.add(j2);
