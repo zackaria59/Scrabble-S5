@@ -83,7 +83,7 @@ public class Tuile  {
 
 			@Override
 			public void handle(MouseEvent e) {
-				rec.setFill(Color.LIGHTGREEN);
+				rec.setFill(Color.BURLYWOOD);
 				
 			}
         	

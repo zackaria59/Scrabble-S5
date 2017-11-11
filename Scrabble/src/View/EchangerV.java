@@ -80,14 +80,18 @@ public class EchangerV extends StackPane{
         fenetre.setStrokeWidth(10);
 		fenetre.setFill(Color.web("rgba(255,255,255,1)"));
 	
-		Text t =new Text("Echanger");
+		Text t =new Text("Échanger les lettres");
 		t.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		t.setUnderline(true);
 		t.setPickOnBounds(false);
 		
-		Text t2 =new Text("Selectionnez vos jetons à échanger");
+		Text t2 =new Text("Sélectionnez vos lettres à échanger");
 		t2.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		t2.setPickOnBounds(false);
+		
+		/*Text t3 =new Text("L'échange comptera pour un tour joué");
+		t3.setFont(Font.loadFont("file:ressource/police/Munich.ttf",28));
+		t3.setPickOnBounds(false);*/
 		
 		contenuFenetre.getChildren().addAll(t,cadreToutLesJetons,t2,cadreJetonJoueur);
 		contenuFenetre.setAlignment(Pos.CENTER);
@@ -119,7 +123,7 @@ public class EchangerV extends StackPane{
 		quitter.setOnMouseClicked(e->{
 			this.setVisible(false);
 		});
-		Text quit=new Text("Quitter");
+		Text quit=new Text("Annuler");
 		quit.setFont(Font.loadFont("file:ressource/police/Munich.ttf",32));
 		quit.setPickOnBounds(false);
 		
@@ -157,7 +161,7 @@ public class EchangerV extends StackPane{
 			this.setVisible(false);
 		});
 		
-		Text valid=new Text("Valider");
+		Text valid=new Text("Échanger");
 		valid.setFont(Font.loadFont("file:ressource/police/Munich.ttf",32));
 		valid.setPickOnBounds(false);
 		

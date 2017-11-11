@@ -32,10 +32,7 @@ public class PlateauV extends StackPane {
 		initialisePlateau();
 		this.setPickOnBounds(false);
 		grid.setPickOnBounds(false);
-		grid.setStyle("-fx-border-color: blue;\n"
-                + "-fx-border-insets: 5;\n"
-                + "-fx-border-width: 3;\n"
-                + "-fx-border-style: dashed;\n;");
+
 		//this.addEventFilter(MouseDragEvent.ANY,e -> System.out.println(e));
 		this.setOnMouseDragEntered(new EventHandler<MouseDragEvent>(){
 
@@ -97,86 +94,88 @@ public class PlateauV extends StackPane {
 	public void initialiseTypeCase()
 	{
 		
-		plateau[0][0].setCouleur(Color.RED);
-		plateau[0][3].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[0][7].setCouleur(Color.RED);
-		plateau[0][11].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[0][14].setCouleur(Color.RED);
 		
-		plateau[1][1].setCouleur(Color.CORAL);
-		plateau[1][5].setCouleur(Color.BLUE);
-		plateau[1][9].setCouleur(Color.BLUE);
-		plateau[1][13].setCouleur(Color.CORAL);
 		
-		plateau[2][2].setCouleur(Color.CORAL);
-		plateau[2][6].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[2][8].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[2][12].setCouleur(Color.CORAL);
+		plateau[0][0].setCouleur(Color.rgb(165, 4, 4));
+		plateau[0][3].setCouleur(Color.rgb(96, 215, 195));
+		plateau[0][7].setCouleur(Color.rgb(165, 4, 4));
+		plateau[0][11].setCouleur(Color.rgb(96, 215, 195));
+		plateau[0][14].setCouleur(Color.rgb(165, 4, 4));
 		
-		plateau[3][0].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[3][7].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[3][3].setCouleur(Color.CORAL);
-		plateau[3][11].setCouleur(Color.CORAL);
-		plateau[3][14].setCouleur(Color.CORNFLOWERBLUE);
+		plateau[1][1].setCouleur(Color.rgb(255, 133, 35));
+		plateau[1][5].setCouleur(Color.rgb(43, 43, 116));
+		plateau[1][9].setCouleur(Color.rgb(43, 43, 116));
+		plateau[1][13].setCouleur(Color.rgb(255, 133, 35));
 		
-		plateau[4][4].setCouleur(Color.CORAL);
-		plateau[4][10].setCouleur(Color.CORAL);
+		plateau[2][2].setCouleur(Color.rgb(255, 133, 35));
+		plateau[2][6].setCouleur(Color.rgb(96, 215, 195));
+		plateau[2][8].setCouleur(Color.rgb(96, 215, 195));
+		plateau[2][12].setCouleur(Color.rgb(255, 133, 35));
 		
-		plateau[5][1].setCouleur(Color.BLUE);
-		plateau[5][5].setCouleur(Color.BLUE);
-		plateau[5][9].setCouleur(Color.BLUE);
-		plateau[5][13].setCouleur(Color.BLUE);
+		plateau[3][0].setCouleur(Color.rgb(96, 215, 195));
+		plateau[3][7].setCouleur(Color.rgb(96, 215, 195));
+		plateau[3][3].setCouleur(Color.rgb(255, 133, 35));
+		plateau[3][11].setCouleur(Color.rgb(255, 133, 35));
+		plateau[3][14].setCouleur(Color.rgb(96, 215, 195));
 		
-		plateau[6][2].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[6][6].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[6][8].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[6][12].setCouleur(Color.CORNFLOWERBLUE);
+		plateau[4][4].setCouleur(Color.rgb(255, 133, 35));
+		plateau[4][10].setCouleur(Color.rgb(255, 133, 35));
 		
-		plateau[7][0].setCouleur(Color.RED);
-		plateau[7][3].setCouleur(Color.CORNFLOWERBLUE);
+		plateau[5][1].setCouleur(Color.rgb(43, 43, 116));
+		plateau[5][5].setCouleur(Color.rgb(43, 43, 116));
+		plateau[5][9].setCouleur(Color.rgb(43, 43, 116));
+		plateau[5][13].setCouleur(Color.rgb(43, 43, 116));
 		
-		ImageView img =new ImageView(new Image(getClass().getClassLoader().getResource("images/Etoile.png").toString(), true));
+		plateau[6][2].setCouleur(Color.rgb(96, 215, 195));
+		plateau[6][6].setCouleur(Color.rgb(96, 215, 195));
+		plateau[6][8].setCouleur(Color.rgb(96, 215, 195));
+		plateau[6][12].setCouleur(Color.rgb(96, 215, 195));
+		
+		plateau[7][0].setCouleur(Color.rgb(165, 4, 4));
+		plateau[7][3].setCouleur(Color.rgb(96, 215, 195));
+		
+		ImageView img =new ImageView(new Image(getClass().getClassLoader().getResource("images/etoile.png").toString(), true));
 		img.fitWidthProperty().bind(plateau[7][7].getContainer().widthProperty());
 		img.fitHeightProperty().bind(plateau[7][7].getContainer().heightProperty());
 		plateau[7][7].setImage(img);
 		
-		plateau[7][11].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[7][14].setCouleur(Color.RED);
+		plateau[7][11].setCouleur(Color.rgb(96, 215, 195));
+		plateau[7][14].setCouleur(Color.rgb(165, 4, 4));
 		
-		plateau[8][2].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[8][6].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[8][8].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[8][12].setCouleur(Color.CORNFLOWERBLUE);
+		plateau[8][2].setCouleur(Color.rgb(96, 215, 195));
+		plateau[8][6].setCouleur(Color.rgb(96, 215, 195));
+		plateau[8][8].setCouleur(Color.rgb(96, 215, 195));
+		plateau[8][12].setCouleur(Color.rgb(96, 215, 195));
 	
-		plateau[9][1].setCouleur(Color.BLUE);
-		plateau[9][5].setCouleur(Color.BLUE);
-		plateau[9][9].setCouleur(Color.BLUE);
-		plateau[9][13].setCouleur(Color.BLUE);
+		plateau[9][1].setCouleur(Color.rgb(43, 43, 116));
+		plateau[9][5].setCouleur(Color.rgb(43, 43, 116));
+		plateau[9][9].setCouleur(Color.rgb(43, 43, 116));
+		plateau[9][13].setCouleur(Color.rgb(43, 43, 116));
 	
-		plateau[10][4].setCouleur(Color.CORAL);
-		plateau[10][10].setCouleur(Color.CORAL);
+		plateau[10][4].setCouleur(Color.rgb(255, 133, 35));
+		plateau[10][10].setCouleur(Color.rgb(255, 133, 35));
 	
-		plateau[11][0].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[11][7].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[11][3].setCouleur(Color.CORAL);
-		plateau[11][11].setCouleur(Color.CORAL);
-		plateau[11][14].setCouleur(Color.CORNFLOWERBLUE);
+		plateau[11][0].setCouleur(Color.rgb(96, 215, 195));
+		plateau[11][7].setCouleur(Color.rgb(96, 215, 195));
+		plateau[11][3].setCouleur(Color.rgb(255, 133, 35));
+		plateau[11][11].setCouleur(Color.rgb(255, 133, 35));
+		plateau[11][14].setCouleur(Color.rgb(96, 215, 195));
 	
-		plateau[12][2].setCouleur(Color.CORAL);
-		plateau[12][6].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[12][8].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[12][12].setCouleur(Color.CORAL);
+		plateau[12][2].setCouleur(Color.rgb(255, 133, 35));
+		plateau[12][6].setCouleur(Color.rgb(96, 215, 195));
+		plateau[12][8].setCouleur(Color.rgb(96, 215, 195));
+		plateau[12][12].setCouleur(Color.rgb(255, 133, 35));
 	
-		plateau[13][1].setCouleur(Color.CORAL);
-		plateau[13][5].setCouleur(Color.BLUE);
-		plateau[13][9].setCouleur(Color.BLUE);
-		plateau[13][13].setCouleur(Color.CORAL);
+		plateau[13][1].setCouleur(Color.rgb(255, 133, 35));
+		plateau[13][5].setCouleur(Color.rgb(43, 43, 116));
+		plateau[13][9].setCouleur(Color.rgb(43, 43, 116));
+		plateau[13][13].setCouleur(Color.rgb(255, 133, 35));
 		
-		plateau[14][0].setCouleur(Color.RED);
-		plateau[14][3].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[14][7].setCouleur(Color.RED);
-		plateau[14][11].setCouleur(Color.CORNFLOWERBLUE);
-		plateau[14][14].setCouleur(Color.RED);
+		plateau[14][0].setCouleur(Color.rgb(165, 4, 4));
+		plateau[14][3].setCouleur(Color.rgb(96, 215, 195));
+		plateau[14][7].setCouleur(Color.rgb(165, 4, 4));
+		plateau[14][11].setCouleur(Color.rgb(96, 215, 195));
+		plateau[14][14].setCouleur(Color.rgb(165, 4, 4));
 	}
 
 	

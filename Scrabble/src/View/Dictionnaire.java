@@ -43,7 +43,7 @@ public class Dictionnaire extends StackPane{
 		hb.setMaxWidth(largeur);
 		
 		motRecherche=new TextField();
-		lab=new Label("Veuillez entre un mot");
+		lab=new Label("Recherche...");
 		afficheResultat=new Label();
 
 		quitter=new Rectangle();
@@ -71,7 +71,7 @@ public class Dictionnaire extends StackPane{
 		quitter.setOnMouseClicked(e->{
 			this.setVisible(false);
 		});
-		quit=new Text("Quitter");
+		quit=new Text("Annuler");
 		quit.setFont(Font.loadFont("file:ressource/police/Munich.ttf",32));
 		quit.setPickOnBounds(false);
 		motRecherche.setMaxWidth(largeur*0.45);
@@ -95,16 +95,16 @@ public class Dictionnaire extends StackPane{
 					{
 						
 						afficheResultat.setTextFill(Color.GREEN);
-						afficheResultat.setText("Mot valide");
+						afficheResultat.setText("est un mot valide dans le dictionnaire français.");
 					}
 					else
 					{
 						afficheResultat.setTextFill(Color.RED);
-						afficheResultat.setText("Mot Inconnu");
+						afficheResultat.setText("n'est pas un mot valide dans le dictionnaire français.");
 					}
 					
 					
-					lab.setText("Veuillez entrer un mot");
+					lab.setText("Recherche...");
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -117,14 +117,14 @@ public class Dictionnaire extends StackPane{
 		
 		lab.setMaxHeight(hauteur*0.2);
 		lab.setMaxWidth(largeur*0.4);
-		lab.setFont(Font.loadFont("file:ressource/police/Munich.ttf",64));
+		lab.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		lab.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
 		
 		afficheResultat.setMaxHeight(hauteur*0.2);
 		afficheResultat.setMaxWidth(largeur*0.4);
 		afficheResultat.setTranslateX(largeur*0.1);
 		afficheResultat.setTranslateY(hauteur*0.1);
-		afficheResultat.setFont(Font.loadFont("file:ressource/police/Munich.ttf",64));
+		afficheResultat.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		afficheResultat.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
 		
 		background=new Rectangle();
