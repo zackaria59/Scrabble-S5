@@ -388,6 +388,47 @@ public class Plateau implements Serializable {
 		return true;
 	}
 
+	public boolean voisinJetonPresent(Jeton jt)
+	{
+		int x=jt.getX(),y=jt.getY();
+		
+		if(x!=0)
+		{
+			if(plateau[x-1][y].jetonValide())
+			{return true;}
+		}
+		if(x!=14)
+		{
+			if(plateau[x+1][y].jetonValide())
+			{return true;}
+		}
+		if(y!=0)
+		{
+			if(plateau[x][y-1].jetonValide())
+			{return true;}
+		}
+		if(y!=14)
+		{
+			if(plateau[x][y+1].jetonValide())
+			{return true;}
+		}
+		
+		return false;
+	}
+	
+	public boolean voisinDuMotPosePresent()
+	{
+		for(Jeton jt:this.jetonNoValide)
+		{
+			if(voisinJetonPresent(jt))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public void triParY() {
 		Jeton jtamp;
 
@@ -519,7 +560,8 @@ public class Plateau implements Serializable {
 						tampY++;
 						i--;
 					}
-				} else {
+				} 
+				else {
 					listTamp.addLast(jetonNoValide.get(i + 1));
 					tampY++;
 				}
@@ -559,6 +601,11 @@ public class Plateau implements Serializable {
 		}
 		System.out.println("test3 = " + passeParJetonPose);
 
+		if(passeParJetonPose==false)
+		{
+			passeParJetonPose=this.voisinDuMotPosePresent();
+		}
+		
 		this.afficheListTamp();
 		return passeParJetonPose;
 	}
@@ -621,6 +668,11 @@ public class Plateau implements Serializable {
 
 		}
 
+		if(passeParJetonPose==false)
+		{
+			passeParJetonPose=this.voisinDuMotPosePresent();
+		}
+		
 		return true;
 	}
 
@@ -677,7 +729,8 @@ public class Plateau implements Serializable {
 	}
 
 	public LinkedList<Jeton> getMotPose() {
-		if (this.motMemeLigne()) {
+		if (this.motMemeLigne()) 
+		{
 			System.out.println("Mot en ligne");
 			if (this.motContinuEnLigne(this.jetonNoValide.get(0).getX())) {
 				System.out.println("Mot continu en Ligne -->");
@@ -686,7 +739,8 @@ public class Plateau implements Serializable {
 				this.motEnLigne = true;
 				return listTamp;
 			}
-		} else if (this.motMemeColonne()) {
+		} 
+		else if (this.motMemeColonne()) {
 			System.out.println("Mot en colonne");
 			if (this.motContinuEnColonne(this.jetonNoValide.get(0).getY())) {
 				System.out.println("Mot continu en colonne -->");

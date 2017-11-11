@@ -119,7 +119,7 @@ public class Tuile  {
 	{
 		couleur=c;
 		rec.setStroke(c.darker());
-		rec.setFill(c.brighter());
+		rec.setFill(c);
 	}
 	
 	public void setImage(ImageView imgg)

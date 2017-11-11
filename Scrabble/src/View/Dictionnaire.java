@@ -44,6 +44,7 @@ public class Dictionnaire extends StackPane{
 		
 		motRecherche=new TextField();
 		lab=new Label("Recherche...");
+		lab.setAlignment(Pos.CENTER);
 		afficheResultat=new Label();
 
 		quitter=new Rectangle();
@@ -85,6 +86,7 @@ public class Dictionnaire extends StackPane{
 			{
 				
 				afficheResultat.setText("Chargement ...");
+
 				try {
 					
 					
@@ -95,12 +97,12 @@ public class Dictionnaire extends StackPane{
 					{
 						
 						afficheResultat.setTextFill(Color.GREEN);
-						afficheResultat.setText("est un mot valide dans le dictionnaire français.");
+						afficheResultat.setText("' "+motRecherche.getText()+" ' est un mot valide dans le dictionnaire français.");
 					}
 					else
 					{
 						afficheResultat.setTextFill(Color.RED);
-						afficheResultat.setText("n'est pas un mot valide dans le dictionnaire français.");
+						afficheResultat.setText("' "+motRecherche.getText()+" ' n'est pas un mot valide dans le dictionnaire français.");
 					}
 					
 					
@@ -115,25 +117,27 @@ public class Dictionnaire extends StackPane{
 			}
 		});
 		
-		lab.setMaxHeight(hauteur*0.2);
-		lab.setMaxWidth(largeur*0.4);
+		lab.setMaxHeight(hauteur);
+		lab.setMaxWidth(largeur);
 		lab.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		lab.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
 		
-		afficheResultat.setMaxHeight(hauteur*0.2);
-		afficheResultat.setMaxWidth(largeur*0.4);
+		afficheResultat.setMaxHeight(hauteur);
+		afficheResultat.setMaxWidth(largeur);
 		afficheResultat.setTranslateX(largeur*0.1);
 		afficheResultat.setTranslateY(hauteur*0.1);
+		afficheResultat.setAlignment(Pos.CENTER);
 		afficheResultat.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		afficheResultat.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
 		
 		background=new Rectangle();
-		background.setFill(Color.web("rgba(255,255,255,0.7)"));
+		background.setFill(Color.web("rgba(255,255,255,0.85)"));
 		background.setHeight(hauteur);
 		background.setWidth(largeur);
 		
 		hb.getChildren().addAll(motRecherche,afficheResultat);
-
+		hb.setAlignment(Pos.CENTER);
+		
 		spq=new StackPane();
 		spq.setPickOnBounds(false);
 		
