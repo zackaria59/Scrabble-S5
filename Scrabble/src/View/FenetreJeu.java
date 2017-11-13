@@ -33,7 +33,17 @@ public class FenetreJeu extends StackPane{
 	private JokerChoixLettre jcl;
 	private Dictionnaire dico;
 	private EchangerV ev;
+	private FenetreMessage fm;
+	private Chronometre chrono;
 	
+
+	public Chronometre getChrono() {
+		return chrono;
+	}
+
+	public void setChrono(Chronometre chrono) {
+		this.chrono = chrono;
+	}
 
 	public Dictionnaire getDico() {
 		return dico;
@@ -108,7 +118,6 @@ public class FenetreJeu extends StackPane{
 		 
 		ij=new InfoJoueur();
 		ij.setAlignment(Pos.TOP_LEFT);
-		//ij.afficheInfoJetons();
 		ij.afficheNom("Killua");
 		ij.setPickOnBounds(false);
 		ij.setTranslateX(0);
@@ -126,11 +135,22 @@ public class FenetreJeu extends StackPane{
 		dico=new Dictionnaire(largeur,hauteur);
 		dico.setVisible(false);
 		
+		fm=new FenetreMessage(largeur,hauteur);
+		fm.setVisible(false);
+		
+		chrono=new Chronometre(largeur,hauteur);
+		
+		
+		
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
-		this.getChildren().addAll(background,p,ij,mc,jcl.getSp(),dico,ev);
+		this.getChildren().addAll(background,p,ij,mc,jcl.getSp(),dico,ev,fm,chrono);
 	
 	}
 	
+	public FenetreMessage getFm() {
+		return fm;
+	}
+
 	public PiocheJeton getPj() {
 		return pj;
 	}
@@ -160,7 +180,7 @@ public class FenetreJeu extends StackPane{
 
 	public void setInFoJoueur(Joueur j)
 	{
-		ij.afficheNom(j.getPseudo());
+		ij.setInfoJoueur(j);
 		ij.afficheInfoJetons(genereJetonV(j.getJetons()));
 	}
 	

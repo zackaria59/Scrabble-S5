@@ -1,18 +1,30 @@
 package View;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import Controller.ControllerPlateau;
 import Model.Jeton;
 import Model.Joueur;
+import javafx.animation.PathTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 public class InfoJoueur extends StackPane{
 	
@@ -21,29 +33,37 @@ public class InfoJoueur extends StackPane{
 	private ArrayList<JetonV> jetonsV;
 	private ControllerPlateau cp;
 	private Joueur j;
-	
+	private Label points;
+	private HBox hb;
 	
 	public InfoJoueur()
 	{
+			
 		cadreJetons=new GridPane();
 		cadreJetons.setPickOnBounds(false);
-		labelNom=new Label();
+		labelNom=new Label("Test");
+	
+		
 		this.setHeight(500);
 		this.setWidth(500);
-		this.getChildren().add(labelNom);
+		this.getChildren().addAll(labelNom);
 		this.getChildren().add(cadreJetons);
 	}
 	
 	public void afficheNom(String nom)
 	{
-		labelNom.setAlignment(Pos.TOP_LEFT);
-		labelNom.setFont(Font.font("Berlin Sans FB Demi", FontWeight.BOLD, 40));
+		labelNom.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		labelNom.setText(nom);
+		
 	}
 
 	public void setInfoJoueur(Joueur j)
 	{
-		this.afficheNom(j.getPseudo());
+		
+		System.out.println("==================================================================>>> "+j.getScore()+"<<<<==================================================");
+		this.afficheNom(j.getPseudo()+"   "+j.getScore()+"  pts");
+		
+		
 	}
 	
 	
@@ -70,33 +90,35 @@ public class InfoJoueur extends StackPane{
 		}
 		
 		cadreJetons.setAlignment(Pos.CENTER_RIGHT);
-		animation();
+	
 	}
 	
-	public void animation()
+	public void animationReprendre()
 	{
-		Thread daemonThread = new Thread(new Runnable() {
-	
-			@Override
-			public void run() {
-			try {
-				int a=0;
-				while (a<400) {
-				
-				cadreJetons.setTranslateY(1);
-				a++;
-					}
+		Random r=new Random();
+		ArrayList<Integer> listIndex=new ArrayList<Integer>();
+		
+		for(int i=0;i<cadreJetons.getChildren().size();i++)
+		{
+			Node node = cadreJetons.getChildren().get(i);
+			int rand;
 			
+			while(listIndex.contains((rand=r.nextInt(7)))){
+				rand=r.nextInt(7);
+			}
+		
+			TranslateTransition t=new TranslateTransition();
+			t.setNode(node);
+			t.setToX(cadreJetons.getChildren().get(rand).getLayoutX()-node.getLayoutX());
+			t.setDuration(Duration.seconds(0.7));
+			t.play();
 			
-				} finally {
-	
-				
-				}	
-	
-				}
-			}, "Demon");
+			((JetonV)node).setXinitiale(cadreJetons.getChildren().get(rand).getLayoutX()-node.getLayoutX());
+			listIndex.add(rand);
 			
-			daemonThread.start();
+		}
+		
+		System.out.println(listIndex.toString());
 	}
 	
 	public void setControllerJetonV(EventHandler ac)
@@ -111,5 +133,10 @@ public class InfoJoueur extends StackPane{
 	public void viderJetons()
 	{
 		cadreJetons.getChildren().clear();
+	}
+	
+	public void setPoints(int nbp)
+	{
+		points.setText(""+nbp);
 	}
 }

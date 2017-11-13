@@ -13,15 +13,33 @@ public class Partie {
 	private Plateau plateau;
 	private Dictionnaire dico;
 	private String erreurMsg;
-
 	private boolean joueurJoueTour;
+	private boolean optionTimer;
 	
-	public Partie(ArrayList<Joueur> joueurs, Sac sac, Plateau plateau) throws FileNotFoundException {
+	private int nbpointsCoupJoue=0;
+	
+	public String getErreurMsg() {
+		return erreurMsg;
+	}
+
+	public boolean isOptionTimer() {
+		return optionTimer;
+	}
+
+	public void setOptionTimer(boolean optionTimer) {
+		this.optionTimer = optionTimer;
+	}
+
+	public void setErreurMsg(String erreurMsg) {
+		this.erreurMsg = erreurMsg;
+	}
+
+	public Partie(ArrayList<Joueur> joueurs, Sac sac, Plateau plateau,boolean activeTimer) throws FileNotFoundException {
 		this.joueurs = joueurs;
 		this.sac = sac;
 		this.setPlateau(plateau);
 		setJoueurJoueTour(true);
-		
+		optionTimer=activeTimer;
 		dico=new Dictionnaire("ressource/dico.txt");
 
 	}
@@ -170,6 +188,7 @@ public class Partie {
 	
 	public boolean verifMotValide(LinkedList<Jeton> listChar) throws IOException
 	{
+		LinkedList<Jeton> mot=listChar;
 		
 		if(listChar==null)
 		{
@@ -177,18 +196,28 @@ public class Partie {
 		}
 		
 		String mot1=transformEnMot(listChar);
-		String mot2=transformEnMot2(listChar);
-		System.out.println("mot1 = "+mot1+" taille="+mot1.length()+"\nmot2 = "+mot2+" taille="+mot2.length());
+		System.out.println("mot1 = "+mot1+" taille="+mot1.length());
 		
 		if(dico.verifieMotValide(mot1))
 		{
+			this.nbpointsCoupJoue+=this.CalculPoint(mot);
 			System.out.println("mot Impec");
 			return true;
 		}
-		else{ return false;}
+		else{
+			this.erreurMsg="Le mot "+mot1+" n'existe pas ";
+			return false;}
 		
 	}
 	
+	public int getNbpointsCoupJoue() {
+		return nbpointsCoupJoue;
+	}
+
+	public void setNbpointsCoupJoue(int nbpointsCoupJoue) {
+		this.nbpointsCoupJoue = nbpointsCoupJoue;
+	}
+
 	public boolean verifMotVoisinValide() throws IOException
 	{
 
@@ -208,6 +237,59 @@ public class Partie {
 		}
 		
 		return true;
+	}
+
+public int CalculPoint(LinkedList<Jeton> jet) throws FileNotFoundException {
+		
+		int nbpl =0;
+		int cptMT=0; int cptMD=0;
+		
+		String type;
+		System.out.println("Dans la fonction calcul"+jet.size());
+		for( int i=0; i<jet.size();i++){
+			
+			type=this.getPlateau().getPlateau()[jet.get(i).getX()][jet.get(i).getY()].getType();
+			
+		//	System.out.print(jet.get(i).getX()+"  "+jet.get(i).getY()+"  "+type+"  -   ");
+			System.out.println("Jeton est valide = "+jet.get(i).isValide()+ " et type = "+type+" et points = "+jet.get(i).getPoint());
+			
+			 if(type==("LT")  && !jet.get(i).isValide())
+				{nbpl+=(jet.get(i).getPoint()*3);
+				System.out.println("A");}
+			 
+			 else if(type==("LD")&& !jet.get(i).isValide())
+				{nbpl+=(jet.get(i).getPoint()*2);System.out.println("B");}
+			 
+			 else if(type.equals("MT") &&  !jet.get(i).isValide()) 
+			 {cptMT++;nbpl+=(jet.get(i).getPoint());}	
+			
+			 else if(type.equals("MD")  && !jet.get(i).isValide())
+				{cptMD++;nbpl+=(jet.get(i).getPoint());}
+			 
+			 else if(type==("X") || jet.get(i).isValide())
+				{nbpl+=(jet.get(i).getPoint());System.out.println("C + "+jet.get(i).getPoint());}
+			
+			
+			 
+			 System.out.println("nbpl = "+nbpl);
+			
+		}
+		
+		
+		
+		for(int j=0;j<cptMT;j++) {
+			 nbpl= nbpl*3;
+		}
+		for(int j=0;j<cptMD;j++) {
+			 nbpl= nbpl*2;
+		} 
+		
+		// dans le cas où le mot est composé de 7 lettre (Joueur a fait un Scrabble)
+		if(getPlateau().getJetonNoValide().size()==7)
+			nbpl=nbpl+50;
+		
+		return nbpl;
+		
 	}
 
 	public String inverse(String s){ 
@@ -253,7 +335,6 @@ public class Partie {
 	
 	public boolean joueUnTour() throws IOException
 	{
-		
 		if(verifMotValide(this.getPlateau().getMotPose()) && verifMotVoisinValide())
 			{
 				

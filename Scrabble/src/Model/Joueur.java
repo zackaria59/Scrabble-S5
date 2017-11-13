@@ -123,5 +123,12 @@ public class Joueur implements Serializable {
 	public void setJoueTour(boolean joueTour) {
 		this.joueTour = joueTour;
 	}
+	
+	public void addPoints(int points)
+	{
+		
+		System.out.println("\n\nScore + points = "+score+" + "+points+" = "+(score+points));
+		this.score=this.score+points;
+	}
 
 }

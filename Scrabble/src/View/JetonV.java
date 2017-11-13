@@ -36,8 +36,6 @@ public class JetonV extends StackPane {
 		image=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+lettre+".png").toString()); 
 		 image.setFitHeight(60);
 	     image.setFitWidth(60);
-	     
-	  
 	     this.setMaxSize(80, 80);
 		 this.setPickOnBounds(false);
 		 
@@ -52,8 +50,8 @@ public class JetonV extends StackPane {
 		 	
 		 		if(!this.jetonPourJoker && !this.jetonPourEchanger){
 		 			image.setMouseTransparent(true);
-		        Xinitiale=image.getLayoutX();
-		        Yinitiale=image.getLayoutY();
+		       // Xinitiale=image.getLayoutX();
+		        //Yinitiale=image.getLayoutY();
 		        
 		        dragDeltaX = this.getLayoutX() + event.getX();
 		        dragDeltaY = this.getLayoutY() + event.getY();

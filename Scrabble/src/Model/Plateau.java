@@ -47,7 +47,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MT");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -67,7 +67,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -86,7 +86,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -108,7 +108,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -121,7 +121,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -140,7 +140,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LT");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -159,7 +159,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -172,7 +172,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LD");
 						break;
 					case 7:
-						plateau[i][y] = new Case("ETOILE");
+						plateau[i][y] = new Case("MD");
 						break;
 					case 11:
 						plateau[i][y] = new Case("LD");
@@ -181,7 +181,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MT");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -200,7 +200,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -219,7 +219,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LT");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -232,7 +232,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -254,7 +254,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("LD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -273,7 +273,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -292,7 +292,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MD");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -314,7 +314,7 @@ public class Plateau implements Serializable {
 						plateau[i][y] = new Case("MT");
 						break;
 					default:
-						plateau[i][y] = new Case("");
+						plateau[i][y] = new Case("X");
 						break;
 
 					}
@@ -601,7 +601,7 @@ public class Plateau implements Serializable {
 		}
 		System.out.println("test3 = " + passeParJetonPose);
 
-		if(passeParJetonPose==false)
+		if(passeParJetonPose==false && jetonNoValide.size()>1)
 		{
 			passeParJetonPose=this.voisinDuMotPosePresent();
 		}

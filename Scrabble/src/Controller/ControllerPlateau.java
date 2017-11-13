@@ -16,7 +16,9 @@ import View.FenetreJeu;
 import View.JetonV;
 import View.PlateauV;
 import View.Tuile;
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -43,6 +45,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	private final Point pos = new Point();
 	private boolean premierTour,lettreJokerChoisi;
 	private char lettrejokChoisi;
+	private int tempRestant;
 	
 	private Tuile tuileJetonJoker;
 	
@@ -63,6 +66,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		premierTour=true;
 		lettreJokerChoisi=false;
 		
+		if(partie.isOptionTimer())
+		{
+			tempRestant=60;
+			chronoActif();
+		}
 		//DesignePremierJoueur();
 	}
 	
@@ -99,6 +107,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	
 	public void passeTour()
 	{
+		tempRestant=60;
 		partie.videList();
 		this.postionJetonPose.clear();
 		this.setJoueurQuijoue(partie.nextJoueur());
@@ -108,8 +117,9 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 	
 	public void melanger()
 	{
-		Collections.shuffle(partie.getJoueurQuiJoue().getJetons());
-		this.setJoueurQuijoue(partie.getJoueurQuiJoue());
+		//Collections.shuffle(partie.getJoueurQuiJoue().getJetons());
+		//this.setJoueurQuijoue(partie.getJoueurQuiJoue());
+		fj.getIj().animationReprendre();
 	}
 	
 	public void reprendre()
@@ -152,6 +162,38 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 		reprendre();
 		passeTour();
 	}
+	
+	public void chronoActif(){
+		
+		Timeline timer=new Timeline();
+		timer.setCycleCount(Timeline.INDEFINITE);
+		
+		if(timer!=null)
+		{
+			timer.stop();
+		}
+		
+		KeyFrame kf=new KeyFrame(Duration.seconds(1),new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				
+				tempRestant--;
+				
+				fj.getChrono().setTime(tempRestant);
+				
+				if(tempRestant==0)
+				{
+					passeTour();
+				}
+				
+			}
+			
+		});
+		
+		timer.getKeyFrames().add(kf);
+		timer.playFromStart();
+	}
 
 	@Override
 	public void handle(MouseEvent e) {
@@ -167,7 +209,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 			}
 			else if(((BoutonCustom) o).getT().getText().equals("Passer"))
 			{
-				this.setJoueurQuijoue(partie.nextJoueur());
+				passeTour();
 			}
 			else if(((BoutonCustom) o).getT().getText().equals("Jouer"))
 			{
@@ -176,18 +218,17 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 					try {
 						if(partie.jouePremierTour())
 						{
+							fj.getFm().afficheMessage(partie.getJoueurQuiJoue().getPseudo()+" marque "+partie.getNbpointsCoupJoue()+" points !");
+							partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
 							partie.validJetonPose();
 							passeTour();
 							premierTour=false;
+							partie.setNbpointsCoupJoue(0);
 						}
 						else{
+							fj.getFm().setVisible(true);
+							fj.getFm().afficheMessage(partie.getErreurMsg());
 							
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("Information Dialog");
-							alert.setHeaderText(null);
-							alert.setContentText("Pas bon");
-
-							alert.showAndWait();
 							this.partie.videList();
 							this.reprendre();
 						}
@@ -200,18 +241,19 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 					try {
 						if(partie.joueUnTour())
 						{
+							
+							fj.getFm().afficheMessage(partie.getJoueurQuiJoue().getPseudo()+" marque "+partie.getNbpointsCoupJoue()+" points !");
+							partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
 							partie.validJetonPose();
 							passeTour();
 							premierTour=false;
+							partie.setNbpointsCoupJoue(0);
 						}
 						else{
 							
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("Information Dialog");
-							alert.setHeaderText(null);
-							alert.setContentText("Pas bon");
-
-							alert.showAndWait();
+							partie.setNbpointsCoupJoue(0);
+							fj.getFm().afficheMessage(partie.getErreurMsg());
+							
 							this.partie.videList();
 							this.reprendre();
 						}
@@ -284,12 +326,13 @@ public class ControllerPlateau implements EventHandler<MouseEvent>{
 					fj.getMc().activerBoutonJouer();
 				}
 				else{
+					System.out.println("======>  "+((JetonV) o).getXinitiale());
 					
 					TranslateTransition tt=new TranslateTransition();
 					tt.setToX(((JetonV) o).getXinitiale());
 					tt.setToY(((JetonV) o).getYinitiale());
 					tt.setByY(1);
-					tt.setNode((JetonV)o);	
+					tt.setNode((JetonV)o);
 					tt.play();
 				}
 			}
