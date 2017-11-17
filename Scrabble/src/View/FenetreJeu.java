@@ -35,6 +35,7 @@ public class FenetreJeu extends StackPane{
 	private EchangerV ev;
 	private FenetreMessage fm;
 	private Chronometre chrono;
+	private AfficheScoresAutreJoueurs afficheAutreJoueurs;
 	
 
 	public Chronometre getChrono() {
@@ -203,6 +204,18 @@ public class FenetreJeu extends StackPane{
 	public void affichePremierJoueur(ArrayList ls)
 	{
 		this.pj.affichePioche(ls);
+	}
+	
+	public AfficheScoresAutreJoueurs getAfficheAutreJoueurs() {
+		return afficheAutreJoueurs;
+	}
+
+	public void setAfficheAutreJoueurs(int nbJoueur) {
+		
+		this.afficheAutreJoueurs = new AfficheScoresAutreJoueurs(largeur,hauteur);
+		this.afficheAutreJoueurs.setBackgroundByNbJoueur(nbJoueur);
+		this.getChildren().add(this.afficheAutreJoueurs);
+		
 	}
 	
 

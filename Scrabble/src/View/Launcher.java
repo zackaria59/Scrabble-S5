@@ -31,10 +31,14 @@ public class Launcher extends Application{
 		
 		Joueur j1=new Joueur(1,"Cr7",0);
 		Joueur j2=new Joueur(2,"Messi",0);
+		Joueur j3=new Joueur(1,"Kaneki",0);
+		Joueur j4=new Joueur(2,"Ehlmaire",0);
 		
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
 		joueurs.add(j1);
 		joueurs.add(j2);
+		joueurs.add(j3);
+		joueurs.add(j4);
 		
 		
 		Sac sac=new Sac();
@@ -42,11 +46,14 @@ public class Launcher extends Application{
 		
 		j1.piocherDebutPartie(sac);
 		j2.piocherDebutPartie(sac);
+		j3.piocherDebutPartie(sac);
+		j4.piocherDebutPartie(sac);
 		
 		
 		Partie p=new Partie(joueurs,sac,plateau,true);
 		FenetreJeu fj=new FenetreJeu();
 		ControllerPlateau cp =new ControllerPlateau(p,fj);
+		Accueil a = new Accueil();
 		
 		
 		Scene scene=new Scene(fj);

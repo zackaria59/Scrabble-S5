@@ -15,7 +15,7 @@ public class Partie {
 	private String erreurMsg;
 	private boolean joueurJoueTour;
 	private boolean optionTimer;
-	
+	private int nbJoueur;
 	private int nbpointsCoupJoue=0;
 	
 	public String getErreurMsg() {
@@ -39,8 +39,9 @@ public class Partie {
 		this.sac = sac;
 		this.setPlateau(plateau);
 		setJoueurJoueTour(true);
-		optionTimer=activeTimer;
+	//	optionTimer=activeTimer;
 		dico=new Dictionnaire("ressource/dico.txt");
+		setNbJoueur(joueurs.size());
 
 	}
 
@@ -370,5 +371,14 @@ public int CalculPoint(LinkedList<Jeton> jet) throws FileNotFoundException {
 	public void videList()
 	{
 		this.plateau.videList();
+	}
+
+
+	public int getNbJoueur() {
+		return nbJoueur;
+	}
+
+	public void setNbJoueur(int nbJoueur) {
+		this.nbJoueur = nbJoueur;
 	}
 }
