@@ -1,5 +1,6 @@
 package View;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import Model.Joueur;
@@ -16,6 +17,7 @@ public class AfficheScoresAutreJoueurs extends StackPane {
 	private int nbjoueur;
 	private Label[] labelNomScore;
 	private double espace;
+	private double taillePolice;
 	
 	public AfficheScoresAutreJoueurs(double largeur,double hauteur)
 	{
@@ -27,6 +29,9 @@ public class AfficheScoresAutreJoueurs extends StackPane {
 		this.setTranslateX(largeur*0.42);
 		this.setTranslateY(-hauteur*0.42);
 		this.setPickOnBounds(false);
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		taillePolice=dimension.height*0.035;
 		
 		
 		
@@ -54,7 +59,7 @@ public class AfficheScoresAutreJoueurs extends StackPane {
 		for(int i=0;i<joueurs.size();i++)
 		{
 			labelNomScore[i].setText(joueurs.get(i).getPseudo()+"   "+joueurs.get(i).getScore());
-			labelNomScore[i].setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
+			labelNomScore[i].setFont(Font.loadFont("file:ressource/police/Munich.ttf",taillePolice));
 			labelNomScore[i].setTextFill(Color.WHITE);
 			labelNomScore[i].setTranslateY((i+1)*espace);
 			

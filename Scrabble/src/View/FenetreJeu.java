@@ -27,7 +27,7 @@ public class FenetreJeu extends StackPane{
 	private int largeur,hauteur;
 	private InfoJoueur ij;
 	private PlateauV p;
-	private ImageView background;
+	private ImageView background,legende;
 	private MenuCommande mc;
 	private PiocheJeton pj;
 	private JokerChoixLettre jcl;
@@ -102,6 +102,13 @@ public class FenetreJeu extends StackPane{
 		background.setFitWidth(largeur);
 		background.setPickOnBounds(false);
 		
+		legende=new ImageView(getClass().getClassLoader().getResource("images/legendes.png").toString());
+		legende.setFitHeight(hauteur*0.30);
+		legende.setFitWidth(largeur*0.12);
+		legende.setTranslateX(largeur*0.42);
+		legende.setTranslateY(hauteur*0.2);
+		
+		
 		p=new PlateauV(largeur*0.47);
 		p.setTranslateX(largeur*0.08);
 		p.setTranslateY(0);
@@ -117,7 +124,7 @@ public class FenetreJeu extends StackPane{
 		
 		
 		 
-		ij=new InfoJoueur();
+		ij=new InfoJoueur(largeur,hauteur);
 		ij.setAlignment(Pos.TOP_LEFT);
 		ij.afficheNom("Killua");
 		ij.setPickOnBounds(false);
@@ -144,7 +151,7 @@ public class FenetreJeu extends StackPane{
 		
 		
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
-		this.getChildren().addAll(background,p,ij,mc,jcl.getSp(),dico,ev,fm,chrono);
+		this.getChildren().addAll(background,legende,p,ij,mc,jcl.getSp(),dico,ev,fm,chrono);
 	
 	}
 	
