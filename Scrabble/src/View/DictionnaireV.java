@@ -2,7 +2,6 @@ package View;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,7 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class Dictionnaire extends StackPane{
+public class DictionnaireV extends StackPane{
 	
 	private TextField motRecherche;
 	private Label lab,afficheResultat;
@@ -29,10 +28,11 @@ public class Dictionnaire extends StackPane{
 	private Rectangle quitter;
 	private StackPane spq;
 	private Text quit;
+	private Model.Dictionnaire dico;
 	
-	public Dictionnaire(double largeur,double hauteur)
+	public DictionnaireV(double largeur,double hauteur)
 	{
-		
+	
 		this.setHeight(hauteur);
 		this.setWidth(largeur);
 		this.setAlignment(Pos.CENTER);
@@ -79,21 +79,16 @@ public class Dictionnaire extends StackPane{
 		motRecherche.setMaxHeight(hauteur*0.15);
 		motRecherche.setAlignment(Pos.CENTER);
 		motRecherche.setFont(Font.loadFont("file:ressource/police/Munich.ttf",32));
-		motRecherche.setOnKeyPressed(e ->{
+		motRecherche.setOnKeyReleased(e ->{
 			
 			
-			if(e.getCode().equals(KeyCode.ENTER))
-			{
+			
 				
 				afficheResultat.setText("Chargement ...");
 
-				try {
+				
 					
-					
-					Model.Dictionnaire dico=new Model.Dictionnaire("ressource/dico.txt");
-					
-					
-					if(dico.verifieMotValide(motRecherche.getText()))
+					if(dico.motExist(motRecherche.getText()))
 					{
 						
 						afficheResultat.setTextFill(Color.GREEN);
@@ -107,14 +102,8 @@ public class Dictionnaire extends StackPane{
 					
 					
 					lab.setText("Recherche...");
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
+				
+			
 		});
 		
 		lab.setMaxHeight(hauteur);
@@ -148,6 +137,14 @@ public class Dictionnaire extends StackPane{
 		this.getChildren().addAll(background,lab,hb,spq);
 		
 		
+	}
+
+	public Model.Dictionnaire getDico() {
+		return dico;
+	}
+
+	public void setDictionnaire(Model.Dictionnaire dico) {
+		this.dico = dico;
 	}
 
 }
