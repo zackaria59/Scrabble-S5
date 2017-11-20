@@ -7,14 +7,14 @@ import java.util.Collections;
 
 import Model.Jeton;
 import Model.Joueur;
+import Model.JoueurIA;
 import Model.Partie;
 import Model.Plateau;
 import Model.Sac;
 import View.BoutonCustom;
-import View.Dictionnaire;
+import View.DictionnaireV;
 import View.FenetreJeu;
 import View.JetonV;
-import View.PlateauV;
 import View.Tuile;
 import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
@@ -38,23 +38,28 @@ import javafx.util.Duration;
 public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 	private Plateau plateau;
-	private PlateauV plateauView;
 	private Partie partie;
 	private FenetreJeu fj;
-	private JetonV jetonv;
 	private final Point pos = new Point();
 	private boolean premierTour, lettreJokerChoisi;
 	private char lettrejokChoisi;
 	private int tempRestant;
+	private Model.Dictionnaire dico;
 
 	private Tuile tuileJetonJoker;
 
 	private ArrayList<Tuile> postionJetonPose = new ArrayList<Tuile>();
-
-	public ControllerPlateau(Partie partie, FenetreJeu fj) {
+	private JoueurIA jia;
+	
+	public ControllerPlateau(Partie partie, FenetreJeu fj) throws IOException {
+		
+		dico=new Model.Dictionnaire();
 		this.partie = partie;
+		this.partie.setDico(dico);
+		
 		this.fj = fj;
-
+		this.fj.getDicoV().setDictionnaire(dico);
+		
 		fj.getMc().addControllers(this);
 		fj.getJcl().addControllerJetonV(this);
 		fj.getEv().setCp(this);
@@ -65,6 +70,8 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		premierTour = true;
 		lettreJokerChoisi = false;
 
+		jia=new JoueurIA(4,"ordi",0);
+		
 		if (partie.isOptionTimer()) {
 			tempRestant = 60;
 			chronoActif();
@@ -199,9 +206,15 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 			if (((BoutonCustom) o).getT().getText().equals("Melanger")) {
 				this.melanger();
+				jia.joueTour(partie.getPlateau());
 			} else if (((BoutonCustom) o).getT().getText().equals("Passer")) {
 				passeTour();
-			} else if (((BoutonCustom) o).getT().getText().equals("Jouer")) {
+			}
+			 else if (((BoutonCustom) o).getT().getText().equals("Quitter")) {
+				System.out.println("Quitter");	
+				 System.exit(0);
+				}
+			 else if (((BoutonCustom) o).getT().getText().equals("Jouer")) {
 				if (this.premierTour) {
 					try {
 						if (partie.jouePremierTour()) {
@@ -308,7 +321,8 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 			} else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
 				System.out.println("Hi" + ((JetonV) o).isJetonPourEchanger());
 
-				if (((JetonV) o).isJetonPourJoker()) {
+				if (((JetonV) o).isJetonPourJoker()) 
+				{
 					this.lettrejokChoisi = ((JetonV) o).getLettre();
 					System.out.println("a clicke sur un jeton joker");
 					this.lettreJokerChoisi = true;
@@ -326,14 +340,15 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					partie.getPlateau().setJeton(tuileJetonJoker.getX(), tuileJetonJoker.getY(), lettrejokChoisi);
 
 					this.fj.getJcl().getSp().setVisible(false);
-				} else if (((JetonV) o).isJetonPourEchanger()) {
+				} 
+				else if (((JetonV) o).isJetonPourEchanger()) {
 
 					if (((JetonV) o).isSelectionnePourEchange()) {
 						((JetonV) o).setSelectionnePourEchange(false);
 						((JetonV) o).setTranslateY(0);
 					} else {
 						((JetonV) o).setSelectionnePourEchange(true);
-						((JetonV) o).setTranslateY(-60);
+						((JetonV) o).setTranslateY(-30);
 					}
 				}
 			} else if (e.getEventType().equals(MouseEvent.MOUSE_ENTERED)) {

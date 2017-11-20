@@ -34,15 +34,22 @@ public class Partie {
 		this.erreurMsg = erreurMsg;
 	}
 
-	public Partie(ArrayList<Joueur> joueurs, Sac sac, Plateau plateau,boolean activeTimer) throws FileNotFoundException {
+	public Partie(ArrayList<Joueur> joueurs, Sac sac, Plateau plateau,boolean activeTimer) throws IOException {
 		this.joueurs = joueurs;
 		this.sac = sac;
 		this.setPlateau(plateau);
 		setJoueurJoueTour(true);
 	//	optionTimer=activeTimer;
-		dico=new Dictionnaire("ressource/dico.txt");
 		setNbJoueur(joueurs.size());
 
+	}
+
+	public Dictionnaire getDico() {
+		return dico;
+	}
+
+	public void setDico(Dictionnaire dico) {
+		this.dico = dico;
 	}
 
 	public Sac getSac() {
@@ -199,7 +206,7 @@ public class Partie {
 		String mot1=transformEnMot(listChar);
 		System.out.println("mot1 = "+mot1+" taille="+mot1.length());
 		
-		if(dico.verifieMotValide(mot1))
+		if(dico.motExist(mot1))
 		{
 			this.nbpointsCoupJoue+=this.CalculPoint(mot);
 			System.out.println("mot Impec");

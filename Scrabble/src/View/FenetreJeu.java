@@ -31,7 +31,7 @@ public class FenetreJeu extends StackPane{
 	private MenuCommande mc;
 	private PiocheJeton pj;
 	private JokerChoixLettre jcl;
-	private Dictionnaire dico;
+	private DictionnaireV dico;
 	private EchangerV ev;
 	private FenetreMessage fm;
 	private Chronometre chrono;
@@ -46,7 +46,7 @@ public class FenetreJeu extends StackPane{
 		this.chrono = chrono;
 	}
 
-	public Dictionnaire getDico() {
+	public DictionnaireV getDico() {
 		return dico;
 	}
 
@@ -58,8 +58,8 @@ public class FenetreJeu extends StackPane{
 		this.ev = ev;
 	}
 
-	public void setDictionnaire(Dictionnaire dictionnaire) {
-		dico = dictionnaire;
+	public void setDictionnaireV(DictionnaireV DictionnaireV) {
+		dico = DictionnaireV;
 	}
 
 	public JokerChoixLettre getJcl() {
@@ -118,7 +118,7 @@ public class FenetreJeu extends StackPane{
 		mc=new MenuCommande(height,width);
 		//mc.setTranslateY(height*0.2);
 		mc.setTranslateX(width*0.07);
-		mc.setTranslateY(height*0.20);
+		mc.setTranslateY(height*0.10);
 		mc.setAlignment(Pos.CENTER_LEFT);
 		mc.setPickOnBounds(false);
 		
@@ -140,7 +140,7 @@ public class FenetreJeu extends StackPane{
 		ev=new EchangerV(largeur,hauteur);
 		ev.setVisible(false);
 		
-		dico=new Dictionnaire(largeur,hauteur);
+		dico=new DictionnaireV(largeur,hauteur);
 		dico.setVisible(false);
 		
 		fm=new FenetreMessage(largeur,hauteur);
@@ -173,6 +173,11 @@ public class FenetreJeu extends StackPane{
 
 	public void setIj(InfoJoueur ij) {
 		this.ij = ij;
+	}
+	
+	public DictionnaireV getDicoV()
+	{
+		return dico;
 	}
 	
 	public ArrayList<JetonV> genereJetonV(ArrayList<Jeton> jetons)
