@@ -4,7 +4,9 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 
+import Model.Dictionnaire;
 import Model.Jeton;
 import Model.Joueur;
 import Model.JoueurIA;
@@ -18,6 +20,7 @@ import View.JetonV;
 import View.Tuile;
 import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Service;
@@ -49,7 +52,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 	private Tuile tuileJetonJoker;
 
 	private ArrayList<Tuile> postionJetonPose = new ArrayList<Tuile>();
-	private JoueurIA jia;
+	private JoueurIA professeur;
 	
 	public ControllerPlateau(Partie partie, FenetreJeu fj) throws IOException {
 		
@@ -70,7 +73,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		premierTour = true;
 		lettreJokerChoisi = false;
 
-		jia=new JoueurIA(4,"ordi",0);
+		professeur=new JoueurIA(4,"ordi",0,4);
+		professeur.piocherDebutPartie(partie.getSac());
+		professeur.setDico(dico);
+		
+		this.insertDicoIA(dico);
 		
 		if (partie.isOptionTimer()) {
 			tempRestant = 60;
@@ -100,8 +107,123 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 	public void setPlateau(Plateau plateau) {
 		this.plateau = plateau;
 	}
+	
+	public void insertDicoIA(Dictionnaire dico)
+	{
+		for(Joueur j:partie.getJoueurs())
+		{
+			if(j.isIa())
+				((JoueurIA)j).setDico(dico);
+		}
+	}
 
-	public void setJoueurQuijoue(Joueur j) {
+	public void poseMotIA(LinkedList<Jeton> linkedList)
+	{
+				
+		int x,y;
+		for(Jeton jt:linkedList)
+		{
+			x=-500;
+			y=-500;
+			
+			Tuile t=fj.getPlateauV().getPlateau()[jt.getX()][jt.getY()];
+			
+			
+			ImageView img = new ImageView(getClass().getClassLoader()
+					.getResource("images/jetons/" + jt.getLettre() + ".png").toString());
+			img.setFitHeight(((Tuile) t).getRec().getHeight() - 1);
+			img.setFitWidth(((Tuile) t).getRec().getWidth() - 1);
+		    t.getContainer().getChildren().add(img);
+
+			 t.setC(jt.getLettre());
+			this.postionJetonPose.add((Tuile) t);
+			partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
+			partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),false);
+			
+			fj.getIj().removeJetonByChar(jt.getLettre());
+			System.out.println("x="+jt.getX()+"  y="+jt.getY());
+			
+			img.setTranslateX((-960));
+			img.setTranslateY(-520);
+			
+			TranslateTransition tt = new TranslateTransition();
+			tt.setToX(img.getLayoutX());
+			tt.setToY(img.getLayoutY());
+			
+			
+			tt.setByY(1);
+			tt.setNode(img);
+			tt.setDuration(Duration.seconds(1.2));
+			tt.play();
+		}
+	
+		Timeline timer2 = new Timeline();
+		timer2.setCycleCount(1);
+
+		if (timer2 != null) {
+			timer2.stop();
+		}
+			KeyFrame kf = new KeyFrame(Duration.seconds(1.4), new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				jouer();
+			}});
+
+		timer2.getKeyFrames().add(kf);
+		timer2.playFromStart();
+		
+		
+	}
+	
+	public void aideProfesseur() throws IOException
+	{
+		professeur.setJetons(partie.getJoueurQuiJoue().getJetons());
+		LinkedList<Jeton> meilleurMot=professeur.geMeilleurMot(partie);
+		ImageView imgJeton;
+		int x,y;
+		int cpt=0;
+		for(Jeton jt:meilleurMot)
+		{
+			double[] coordonnee=new double[2];
+			
+			Tuile t=fj.getPlateauV().getPlateau()[jt.getX()][jt.getY()];
+			
+			ImageView img = new ImageView(getClass().getClassLoader()
+					.getResource("images/jetons/" + jt.getLettre() + ".png").toString());
+			img.setFitHeight(((Tuile) t).getRec().getHeight() - 1);
+			img.setFitWidth(((Tuile) t).getRec().getWidth() - 1);
+		    t.getContainer().getChildren().add(img);
+
+			 t.setC(jt.getLettre());
+			this.postionJetonPose.add((Tuile) t);
+			partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
+			partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),false);
+			
+			coordonnee=fj.getIj().getCoordonneJeton(jt.getLettre());
+			fj.getIj().removeJetonByChar(jt.getLettre());
+			System.out.println("x="+jt.getX()+"  y="+jt.getY());
+			
+			img.setTranslateX(-1000);
+			img.setTranslateY(0);
+			
+			TranslateTransition tt = new TranslateTransition();
+			tt.setToX(img.getLayoutX());
+			tt.setToY(img.getLayoutY());
+			
+			
+			tt.setByY(1);
+			tt.setNode(img);
+			tt.setDuration(Duration.seconds(2));
+			tt.play();
+			
+			fj.getMc().activerBoutonJouer();
+			fj.getMc().activerBoutonReprendre();
+			
+		}
+	}
+	
+	public void setJoueurQuijoue(Joueur j) throws IOException {
 		fj.setInFoJoueur(j);
 		fj.ajoutController(this);
 		partie.setJoueur(j);
@@ -113,11 +235,28 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 			js.add(jj);
 		}
 		js.remove(partie.getJoueurQuiJoue());
-		System.out.println("joueurs =" + partie.getJoueurs().toString() + " js =" + js.toString());
+		
+		
 		fj.getAfficheAutreJoueurs().setJoueurs(js);
+	
+		if(j.isIa()){
+			PauseTransition pause = new PauseTransition(Duration.seconds(2));
+			pause.setOnFinished(event ->
+				{
+					try {
+						poseMotIA(((JoueurIA)j).joueTour(partie));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			);
+			pause.play();
+						
+		}
 	}
 
-	public void passeTour() {
+	public void passeTour() throws IOException {
 		tempRestant = 60;
 		partie.videList();
 		this.postionJetonPose.clear();
@@ -132,7 +271,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		fj.getIj().animationReprendre();
 	}
 
-	public void reprendre() {
+	public void reprendre() throws IOException {
 		for (Tuile t : this.postionJetonPose) {
 			if (t.getX() == 7 && t.getY() == 7) {
 				t.getContainer().getChildren().remove(2);
@@ -153,7 +292,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		fj.getMc().activerBoutonPasser();
 	}
 
-	public void echanger() {
+	public void echanger() throws IOException {
 		ArrayList<JetonV> jetonsSelectionne = this.fj.getEv().getJetonSelectionne();
 
 		for (JetonV jtv : jetonsSelectionne) {
@@ -186,7 +325,12 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 				fj.getChrono().setTime(tempRestant);
 
 				if (tempRestant == 0) {
-					passeTour();
+					try {
+						passeTour();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 			}
@@ -195,6 +339,55 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 		timer.getKeyFrames().add(kf);
 		timer.playFromStart();
+	}
+	
+	public void jouer()
+	{
+		if (this.premierTour) {
+			try {
+				if (partie.jouePremierTour()) {
+					fj.getFm().afficheMessage(partie.getJoueurQuiJoue().getPseudo() + " marque "
+							+ partie.getNbpointsCoupJoue() + " points !");
+					partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
+					partie.validJetonPose();
+					passeTour();
+					premierTour = false;
+					partie.setNbpointsCoupJoue(0);
+				} else {
+					fj.getFm().setVisible(true);
+					fj.getFm().afficheMessage(partie.getErreurMsg());
+
+					this.partie.videList();
+					this.reprendre();
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		} else
+			try {
+				if (partie.joueUnTour()) {
+
+					fj.getFm().afficheMessage(partie.getJoueurQuiJoue().getPseudo() + " marque "
+							+ partie.getNbpointsCoupJoue() + " points !");
+					partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
+					partie.validJetonPose();
+					passeTour();
+					premierTour = false;
+					partie.setNbpointsCoupJoue(0);
+				} else {
+
+					partie.setNbpointsCoupJoue(0);
+					fj.getFm().afficheMessage(partie.getErreurMsg());
+
+					this.partie.videList();
+					this.reprendre();
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	}
 
 	@Override
@@ -206,63 +399,35 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 			if (((BoutonCustom) o).getT().getText().equals("Melanger")) {
 				this.melanger();
-				jia.joueTour(partie.getPlateau());
+									
 			} else if (((BoutonCustom) o).getT().getText().equals("Passer")) {
-				passeTour();
+				try {
+					passeTour();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			 else if (((BoutonCustom) o).getT().getText().equals("Quitter")) {
 				System.out.println("Quitter");	
-				 System.exit(0);
+				try {
+					aideProfesseur();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				 //System.exit(0);
 				}
 			 else if (((BoutonCustom) o).getT().getText().equals("Jouer")) {
-				if (this.premierTour) {
-					try {
-						if (partie.jouePremierTour()) {
-							fj.getFm().afficheMessage(partie.getJoueurQuiJoue().getPseudo() + " marque "
-									+ partie.getNbpointsCoupJoue() + " points !");
-							partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
-							partie.validJetonPose();
-							passeTour();
-							premierTour = false;
-							partie.setNbpointsCoupJoue(0);
-						} else {
-							fj.getFm().setVisible(true);
-							fj.getFm().afficheMessage(partie.getErreurMsg());
-
-							this.partie.videList();
-							this.reprendre();
-						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-				} else
-					try {
-						if (partie.joueUnTour()) {
-
-							fj.getFm().afficheMessage(partie.getJoueurQuiJoue().getPseudo() + " marque "
-									+ partie.getNbpointsCoupJoue() + " points !");
-							partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
-							partie.validJetonPose();
-							passeTour();
-							premierTour = false;
-							partie.setNbpointsCoupJoue(0);
-						} else {
-
-							partie.setNbpointsCoupJoue(0);
-							fj.getFm().afficheMessage(partie.getErreurMsg());
-
-							this.partie.videList();
-							this.reprendre();
-						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				jouer();
 
 			} else if (((BoutonCustom) o).getT().getText().equals("Reprendre")) {
-				reprendre();
+				try {
+					reprendre();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				partie.getPlateau().reprendre();
 
 			} else if (((BoutonCustom) o).getT().getText().equals("Dictionnaire")) {
@@ -274,11 +439,11 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 		} else if (o instanceof JetonV) {
 
-			fj.getP().addJetonDrag(((JetonV) o));
+			fj.getPlateauV().addJetonDrag(((JetonV) o));
 
 			if (e.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
 
-				Object t = fj.getP().getPositionJeton();
+				Object t = fj.getPlateauV().getPositionJeton();
 
 				if (t instanceof Tuile) {
 
@@ -302,7 +467,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 						((Tuile) t).setC(jt.getLettre());
 						this.postionJetonPose.add((Tuile) t);
 						partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
-						partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre());
+						partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),false);
 					}
 
 					fj.getMc().activerBoutonReprendre();
@@ -337,7 +502,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					this.postionJetonPose.add((Tuile) tuileJetonJoker);
 
 					partie.getJoueurQuiJoue().removeJetonByChar('^');
-					partie.getPlateau().setJeton(tuileJetonJoker.getX(), tuileJetonJoker.getY(), lettrejokChoisi);
+					partie.getPlateau().setJeton(tuileJetonJoker.getX(), tuileJetonJoker.getY(), lettrejokChoisi,false);
 
 					this.fj.getJcl().getSp().setVisible(false);
 				} 

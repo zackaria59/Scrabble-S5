@@ -78,7 +78,7 @@ public class FenetreJeu extends StackPane{
 		this.mc = mc;
 	}
 
-	public PlateauV getP() {
+	public PlateauV getPlateauV() {
 		return p;
 	}
 
