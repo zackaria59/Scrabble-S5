@@ -13,10 +13,12 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -30,23 +32,40 @@ public class InfoJoueur extends StackPane{
 	
 	private GridPane cadreJetons;
 	private Label labelNom;
+	private ImageView containerNom;
 	private ArrayList<JetonV> jetonsV;
 	private ControllerPlateau cp;
 	private Joueur j;
 	private Label points;
 	private HBox hb;
 	
-	public InfoJoueur()
+	public ArrayList<JetonV> getJetonsV() {
+		return jetonsV;
+	}
+
+	public void setJetonsV(ArrayList<JetonV> jetonsV) {
+		this.jetonsV = jetonsV;
+	}
+
+	public InfoJoueur(double largeur,double hauteur)
 	{
 			
 		cadreJetons=new GridPane();
 		cadreJetons.setPickOnBounds(false);
-		labelNom=new Label("Test");
 	
+		labelNom=new Label("Test");
+		labelNom.setTextFill(Color.WHITE);
+		labelNom.setTranslateX(largeur*0.04);
+		labelNom.setTranslateY(hauteur*0.01);
+		
+		containerNom=new ImageView(getClass().getClassLoader().getResource("images/panelScoreJ1.png").toString());
+		containerNom.setFitHeight(hauteur*0.15);
+		containerNom.setFitWidth(largeur*0.17);
+		containerNom.setTranslateY(-hauteur*0.07);
 		
 		this.setHeight(500);
 		this.setWidth(500);
-		this.getChildren().addAll(labelNom);
+		this.getChildren().addAll(containerNom,labelNom);
 		this.getChildren().add(cadreJetons);
 	}
 	
@@ -59,9 +78,9 @@ public class InfoJoueur extends StackPane{
 
 	public void setInfoJoueur(Joueur j)
 	{
-		
+		System.out.println(j);
 		System.out.println("==================================================================>>> "+j.getScore()+"<<<<==================================================");
-		this.afficheNom(j.getPseudo()+"   "+j.getScore()+"  pts");
+		this.afficheNom(j.getPseudo()+"   "+j.getScore());
 		
 		
 	}
@@ -110,7 +129,7 @@ public class InfoJoueur extends StackPane{
 			TranslateTransition t=new TranslateTransition();
 			t.setNode(node);
 			t.setToX(cadreJetons.getChildren().get(rand).getLayoutX()-node.getLayoutX());
-			t.setDuration(Duration.seconds(0.7));
+			t.setDuration(Duration.seconds(0.3));
 			t.play();
 			
 			((JetonV)node).setXinitiale(cadreJetons.getChildren().get(rand).getLayoutX()-node.getLayoutX());
@@ -138,5 +157,39 @@ public class InfoJoueur extends StackPane{
 	public void setPoints(int nbp)
 	{
 		points.setText(""+nbp);
+	}
+	
+	public void removeJetonByChar(char c)
+	{
+		
+		JetonV jetonAsupprimer = null;
+		for (JetonV jt:this.jetonsV)
+		{
+			if(jt.getLettre()==c)
+			{
+				jetonAsupprimer=jt;
+				break;
+			}
+		}
+		
+		jetonsV.remove(jetonAsupprimer);
+		cadreJetons.getChildren().remove(jetonAsupprimer);
+		
+	}
+	
+	public double[] getCoordonneJeton(char c)
+	{
+		double[] coor=new double[2];
+		
+		for (JetonV jt:this.jetonsV)
+		{
+			if(jt.getLettre()==c)
+			{
+				coor[0]=jt.getLayoutX()+jt.getTranslateX();
+				coor[1]=jt.getLayoutY()+jt.getTranslateY();
+			}
+		}
+		System.out.println("X = "+coor[0]+ "Y = "+coor[1]);
+		return coor;
 	}
 }

@@ -1,62 +1,192 @@
 package Model;
-//a
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Dictionnaire {
+public class Dictionnaire implements Serializable{
 
+	Noeud racine,courant;
+	final BufferedReader dictionnaire;
+	String pathdico="ressource/dico.txt";
 	
-	private BufferedReader dictionnaire;
-	private String file;
-	
-	public Dictionnaire(String file) throws FileNotFoundException
+	public Dictionnaire() throws IOException
 	{
-		this.file=file;
-		dictionnaire = new BufferedReader(new FileReader(file));
+		racine=new Noeud();
+		dictionnaire = new BufferedReader(new FileReader(pathdico));
+		initialiseArbre();
 	}
 	
-	public boolean verifieMotValide(String mot) throws IOException  // String vérifie si un "mot" est présent dans le dictionnaire 
+	public void insertMot(String mot)
 	{
-		String motDico;
-		
-		mot = mot.substring(0,mot.length()).toUpperCase(); // Transforme le "mot" en majuscule car tout les mots du dico sont en majuscule 
-		System.out.print("Mot dans la fonction dico : |"+mot+"|\n");
-		try {
+		if(mot!=null)
+		{
+			char lettre=mot.charAt(0);
+			Noeud n=this.lettrePresentDansFils(lettre);
+			
+			if(n!=null)
+			{
+				courant=n;
 				
-				while ( (motDico = dictionnaire.readLine()) != null )
-				{
-					//System.out.println(mot +"="+ motDico+" ??" );
-					
-					if (mot.equals(motDico))
-					{	
-						System.out.println("MOT TROUVE DANS LE DICO !!!!!!!!!!!!");
-						dictionnaire = new BufferedReader(new FileReader(file));
-						return true;
+				if(mot.length()!=1){
+					mot=mot.substring(1);
+					insertMot(mot);
 					}
-
+				else{
+					Noeud finDeMot=new Noeud();
+					finDeMot.c='0';
+					 courant.fils.addFirst(finDeMot);
 				}
 				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
-		dictionnaire = new BufferedReader(new FileReader(file));
-			return false;
+			else{
+				Noeud nouveauNoeud=new Noeud();
+				nouveauNoeud.c=lettre;
+				courant.fils.addLast(nouveauNoeud);
+				courant=nouveauNoeud;
+				
+				if(mot.length()!=1){
+					mot=mot.substring(1);
+					insertMot(mot);
+					}
+				else{
+						Noeud finDeMot=new Noeud();
+						finDeMot.c='0';
+						 courant.fils.addFirst(finDeMot);
+					}
+			}
+		}
 	}
 	
-	public static void main(String[] args) throws IOException
+	public Noeud lettrePresentDansFils(char lettre)
 	{
-		Dictionnaire dico=new Dictionnaire("ressource/dico.txt");
+		for (Noeud n:courant.fils)
+		{
+			if(n.c==lettre)
+			{
+				return n;
+			}
+		}
 		
+		return null;
+	}
+	
+	public static void afficheSousArbre(Noeud n)
+	{
+		for(Noeud noeud:n.fils)
+		{
+			System.out.print(noeud.c+" |");
+			afficheSousArbre(noeud);
+		}
+		
+		System.out.println();
+	}
+	
+	public boolean motCaractereValide(String mot){
+		
+		if(mot!=null && mot!="")
+		{
+			for(int i=0;i<mot.length();i++)
+			{
+				
+				if(mot.charAt(i)=='.')
+				{
+					
+				}
+				else if(mot.charAt(i)<65 || mot.charAt(i)>90)
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean motExist(String mot){
+		courant=racine;
+		mot = mot.substring(0,mot.length()).toUpperCase();
+		
+		if(motCaractereValide(mot))
+		{
+			return motExist2(mot);
+		}
+		else{
+			return false;
+		}
+		
+		
+	}
+	
+	private  boolean motExist2(String mot)
+	{	
+			char lettre=mot.charAt(0);
+				
+			if(lettre=='.')
+				{
+					lettre=mot.charAt(1);
+					mot=mot.substring(1);
+				}
+				
+			Noeud n=this.lettrePresentDansFils(lettre);
+			
+		if(n!=null)
+		{
+			if(mot.length()==1)
+			{
+				if(n.fils.getFirst().c=='0')
+				return true;
+				
+				else{
+					return false;
+				}
+			}
+			else{
+				courant=n;
+				return motExist2(mot.substring(1));
+			}
+		}
+		else{
+			return false;
+		}
+			
+		
+	}
+		
+	
+	public void initialiseArbre() throws IOException
+	{
+		String motDico;
+		while ( (motDico = dictionnaire.readLine()) != null )
+		{
+			courant=this.racine;
+			insertMot(motDico);
+		}
+	}
+	
+	
+	public static void main(String args[]) throws IOException
+	{
+		long debut=System.currentTimeMillis();
+		Dictionnaire dico=new Dictionnaire();
+		System.out.println("Temps de chargement= "+(System.currentTimeMillis()-debut)+" ms");
+	
 		Scanner sc=new Scanner(System.in);
 		
-		System.out.println("Entrée un mot :");
-		dico.verifieMotValide(sc.nextLine());
+		while(true)
+		System.out.println(dico.motExist(sc.nextLine()));
+		
+	}
+
+	public boolean motExistPourCombinaison(String s) {
 		
 		
+		return false;
 	}
 }

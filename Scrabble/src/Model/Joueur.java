@@ -5,18 +5,21 @@ import java.util.ArrayList;
 
 public class Joueur implements Serializable {
 	
-	private int id;
-	private String pseudo;
-	private int score;
-	private ArrayList<Jeton> jetons;
-	private boolean joueTour;
+	protected int id;
+	protected String pseudo;
+	protected int score;
+	protected ArrayList<Jeton> jetons;
+	protected boolean joueTour;
+	private int compteurAide;
+	private boolean ia;
 	
-	public Joueur(int id, String pseudo,int score){
+	public Joueur(int id, String pseudo,int score,boolean ia){
 		this.id=id;
 		this.pseudo=pseudo;
 		this.score=score;
 		this.joueTour=false;
 		jetons=new ArrayList<Jeton>();
+		this.setIa(ia);
 	}
 	
 	public void piocher(Sac sac)    // Le joueur tire un jeton du sac 
@@ -129,6 +132,46 @@ public class Joueur implements Serializable {
 		
 		System.out.println("\n\nScore + points = "+score+" + "+points+" = "+(score+points));
 		this.score=this.score+points;
+	}
+	
+	public void afficheJetonsEnMain()
+	{
+		System.out.println("Mes jetons : ");
+		for(Jeton jt: jetons)
+		{
+			System.out.print(jt.getLettre()+" | ");
+		}
+		
+		System.out.println("");
+	}
+	
+	public Jeton getJetonByChar(char c)
+	{
+		for(Jeton jt:jetons)
+		{
+			if(jt.getLettre()==c)
+			{
+				return jt;
+			}
+		}
+		
+		return null;
+	}
+
+	public int getCompteurAide() {
+		return compteurAide;
+	}
+
+	public void setCompteurAide(int compteurAide) {
+		this.compteurAide = compteurAide;
+	}
+
+	public boolean isIa() {
+		return ia;
+	}
+
+	public void setIa(boolean ia) {
+		this.ia = ia;
 	}
 
 }

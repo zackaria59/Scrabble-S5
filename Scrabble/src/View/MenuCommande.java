@@ -40,7 +40,7 @@ public class MenuCommande extends VBox {
        
         
         
-        this.getChildren().addAll(b1,b2,b3,b4,b5);
+        this.getChildren().addAll(b1,b2,b3,b5,b4);
         for(Node nd: this.getChildren()){
         	 this.setMargin(nd,new Insets(hauteur*0.04,0, 0, 0));
         }
@@ -73,13 +73,13 @@ public class MenuCommande extends VBox {
 	public void activerBoutonJouer()
 	{
 		b3.getT().setText("Jouer");
-		//Mettre icone au bouton
+		b3.setImg(new ImageView (getClass().getClassLoader().getResource("images/jouer.png").toString()));
 	}
 	
 	public void activerBoutonPasser()
 	{
 		b3.getT().setText("Passer");
-		//Mettre icone au bouton
+		b3.setImg(new ImageView (getClass().getClassLoader().getResource("images/passer.png").toString()));
 	}
 	
 }

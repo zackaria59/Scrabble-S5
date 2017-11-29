@@ -10,7 +10,6 @@ import Model.Joueur;
 import Model.Partie;
 import Model.Plateau;
 import Model.Sac;
-import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,15 +23,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-public class Accueil extends StackPane  {
+public class ModeDeJeu1 extends StackPane  {
 	private int largeur, hauteur;
 	private ImageView background;
 	private Stage stage2;
 	
 
-	public Accueil(Stage stage) {
+	public ModeDeJeu1(Stage stage) {
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int) dimension.getHeight();
 		int width = (int) dimension.getWidth();
@@ -48,42 +46,36 @@ public class Accueil extends StackPane  {
 		
 		VBox menu=new VBox();
 		
-		 
 		
-		ImageView imageButtonNewGame=new ImageView(getClass().getClassLoader().getResource("images/newGame.png").toString());
-		imageButtonNewGame.setFitHeight(height*0.10);
-		imageButtonNewGame.setFitWidth(width*0.25);	
+		ImageView imageButtonJoueur=new ImageView(getClass().getClassLoader().getResource("images/joueur.png").toString());
+		imageButtonJoueur.setFitHeight(height*0.10);
+		imageButtonJoueur.setFitWidth(width*0.25);	
 		
-		ImageView imageQuitterAccueil=new ImageView(getClass().getClassLoader().getResource("images/quitterAccueil.png").toString());
-		imageQuitterAccueil.setFitHeight(height*0.10);
-		imageQuitterAccueil.setFitWidth(width*0.25);	
+		ImageView imageButtonOrdinateur=new ImageView(getClass().getClassLoader().getResource("images/ordinateur.png").toString());
+		imageButtonOrdinateur.setFitHeight(height*0.10);
+		imageButtonOrdinateur.setFitWidth(width*0.25);	
 		
+		menu.getChildren().addAll(imageButtonJoueur,imageButtonOrdinateur);
 		
-		
-		
-		menu.getChildren().addAll(imageButtonNewGame,imageQuitterAccueil);
-		
-		imageButtonNewGame.setOnMouseEntered(e->{
+		imageButtonJoueur.setOnMouseEntered(e->{
 			DropShadow ds = new DropShadow();
             ds.setOffsetY(10.0);
             ds.setOffsetX(10.0);
             ds.setColor(Color.BLACK);
             
-            imageButtonNewGame.setEffect(ds);
+            imageButtonJoueur.setEffect(ds);
 			
 		});
 		
-		imageButtonNewGame.setOnMouseExited(e->{
-			imageButtonNewGame.setEffect(null);
+		imageButtonJoueur.setOnMouseExited(e->{
+			imageButtonJoueur.setEffect(null);
 		});
 		
 
-		imageButtonNewGame.setOnMouseClicked(e->{ 
-		
-		      
-			ModeDeJeu1 mj1 = new ModeDeJeu1(stage);
-			mj1.setVisible(true);
-			Scene scene=new Scene(mj1);
+		imageButtonJoueur.setOnMouseClicked(e->{ 
+			ModeDeJeuVsJoueurs mj2 = new ModeDeJeuVsJoueurs(stage);
+			mj2.setVisible(true);
+			Scene scene=new Scene(mj2);
 			stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 			stage.setScene(scene);
 			stage.setHeight(hauteur);
@@ -92,24 +84,31 @@ public class Accueil extends StackPane  {
 			stage.setMaximized(true);
 			stage.show();
 		});
-			
-
-		imageQuitterAccueil.setOnMouseEntered(e->{
+		
+		imageButtonOrdinateur.setOnMouseEntered(e->{
 			DropShadow ds = new DropShadow();
             ds.setOffsetY(10.0);
             ds.setOffsetX(10.0);
             ds.setColor(Color.BLACK);
             
-            imageQuitterAccueil.setEffect(ds);
+            imageButtonOrdinateur.setEffect(ds);
 			
 		});
 		
-		imageQuitterAccueil.setOnMouseExited(e->{
-			imageQuitterAccueil.setEffect(null);
+		imageButtonOrdinateur.setOnMouseExited(e->{
+			imageButtonOrdinateur.setEffect(null);
 		});
 		
-		imageQuitterAccueil.setOnMouseClicked(e->{
-			System.exit(0);
+		imageButtonOrdinateur.setOnMouseClicked(e->{
+			ModeDeJeuVsIA mjia = new ModeDeJeuVsIA(stage);
+			mjia.setVisible(true);
+			Scene scene=new Scene(mjia);
+			stage.setScene(scene);
+			stage.setHeight(hauteur);
+			stage.setWidth(largeur);
+			stage.setFullScreen(true);
+			stage.setMaximized(true);
+			stage.show();
 		});
 	
 		menu.setSpacing(hauteur*0.05);

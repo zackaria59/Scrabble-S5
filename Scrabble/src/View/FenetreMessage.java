@@ -2,6 +2,7 @@ package View;
 
 import java.awt.RenderingHints.Key;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,12 +14,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class FenetreMessage extends StackPane {
 
 	private Rectangle fenetre,background,valider;
 	private Text msg;
 	private VBox vb;
+	private boolean fenetreFerme;
 	
 	private double largeur,hauteur,fenX,fenY,vbX,vbY;
 	
@@ -68,6 +71,7 @@ public class FenetreMessage extends StackPane {
 		});
 		
 		valider.setOnMouseClicked(e->{
+			setFenetreFerme(false);
 			this.setVisible(false);
 		});
 		
@@ -106,6 +110,12 @@ public class FenetreMessage extends StackPane {
 		this.setVisible(true);
 		this.msg.setText(msg);
 		animation();
+		PauseTransition pause = new PauseTransition(Duration.seconds(2));
+		pause.setOnFinished(event ->
+		this.setVisible(false)
+		);
+		pause.play();
+	
 	}
 	
 	public void animation()
@@ -127,5 +137,13 @@ public class FenetreMessage extends StackPane {
 		tt2.play();
 		
 		
+	}
+
+	public boolean isFenetreFerme() {
+		return fenetreFerme;
+	}
+
+	public void setFenetreFerme(boolean fenetreFerme) {
+		this.fenetreFerme = fenetreFerme;
 	}
 }

@@ -1,5 +1,7 @@
 package View;
 
+import java.awt.Dimension;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -33,9 +35,11 @@ public class JetonV extends StackPane {
 		setSelectionnePourEchange(false);
 		this.setLettre(lettre);
 	    
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		image=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+lettre+".png").toString()); 
-		 image.setFitHeight(60);
-	     image.setFitWidth(60);
+		
+		 image.setFitHeight(dimension.getHeight()*0.06);
+	     image.setFitWidth(dimension.getHeight()*0.06);
 	     this.setMaxSize(80, 80);
 		 this.setPickOnBounds(false);
 		 
@@ -180,5 +184,6 @@ public class JetonV extends StackPane {
 	public void setSelectionnePourEchange(boolean selectionnePourEchange) {
 		this.selectionnePourEchange = selectionnePourEchange;
 	}
+	
 	
 }

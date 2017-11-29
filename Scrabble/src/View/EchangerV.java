@@ -1,5 +1,6 @@
 package View;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import Controller.ControllerPlateau;
@@ -89,13 +90,15 @@ public class EchangerV extends StackPane{
 		t2.setFont(Font.loadFont("file:ressource/police/Munich.ttf",40));
 		t2.setPickOnBounds(false);
 		
-		/*Text t3 =new Text("L'échange comptera pour un tour joué");
-		t3.setFont(Font.loadFont("file:ressource/police/Munich.ttf",28));
-		t3.setPickOnBounds(false);*/
+		Text t3 =new Text("L'échange comptera pour un tour joué");
+		t3.setFont(Font.loadFont("file:ressource/police/Munich.ttf",25));
+		t3.setPickOnBounds(false);
+		t3.setFill(Color.RED);
 		
-		contenuFenetre.getChildren().addAll(t,cadreToutLesJetons,t2,cadreJetonJoueur);
+		contenuFenetre.getChildren().addAll(t,cadreToutLesJetons,t3,t2,cadreJetonJoueur);
 		contenuFenetre.setAlignment(Pos.CENTER);
 		contenuFenetre.setSpacing(hauteur*0.05);
+		contenuFenetre.setMargin(t3, new Insets(-20,-20,-20,-20));
 		//contenuFenetre.setTranslateY();
 		
 		quitter=new Rectangle();
@@ -157,7 +160,12 @@ public class EchangerV extends StackPane{
 		});
 		
 		valider.setOnMouseClicked(e->{
-			cp.echanger();
+			try {
+				cp.echanger();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			this.setVisible(false);
 		});
 		

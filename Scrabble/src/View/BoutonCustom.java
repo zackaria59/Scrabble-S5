@@ -17,64 +17,66 @@ public class BoutonCustom extends HBox {
 	private Circle cir;
 	private ImageView img;
 	private Text t;
-	
-	public BoutonCustom(double hauteur,double largeur,String nom,Color c)
-	{
-		
-		rec=new Rectangle();
-		rec.setHeight(hauteur*0.165);
-		rec.setWidth(largeur*0.48);
-		rec.setArcHeight(80);
-        rec.setArcWidth(80);
-        rec.setFill(Color.WHITE);
-        rec.setOnMouseEntered(event ->{
+	private DropShadow ds;
 
-        	DropShadow ds = new DropShadow();
-            ds.setOffsetY(10.0);
-            ds.setOffsetX(10.0);
-            ds.setColor(Color.BLACK);
-            
-        	rec.setEffect(ds);
-        	
-        });
-        
-        rec.setOnMouseExited(event ->{
-        	rec.setEffect(null);
-        });
-     
-       cir=new Circle(hauteur*0.115,c);
-        cir.setOnMouseEntered(event ->{
-        	DropShadow ds = new DropShadow();
-            ds.setOffsetY(10.0);
-            ds.setOffsetX(10.0);
-            ds.setColor(Color.BLACK);
-        	cir.setEffect(ds);
-        	
-        });
-        	
-        cir.setOnMouseExited(event ->{
-        	cir.setEffect(null);
-        });
-        
-       img=new ImageView(getClass().getClassLoader().getResource("images/"+nom+".png").toString());
-       img.setFitHeight(hauteur*0.15);
-       img.setFitWidth(hauteur*0.15);
-       img.setTranslateX(-largeur*0.175);
-       img.setTranslateY(hauteur*0.038);
-        
-       t=new Text(nom);
-       t.setFont(Font.loadFont("file:ressource/police/Munich.ttf",32));
-       t.setTranslateY(hauteur*0.063);
-       t.setTranslateX(-hauteur*0.117);
-       t.setFill(c);
-      
-      t.setPickOnBounds(false);
-      img.setPickOnBounds(false);
-      
-      this.setMargin(rec, new Insets(hauteur*0.035, -largeur*0.6, 0, 0));
-      this.getChildren().addAll(rec,cir,img,t);
-      this.setPickOnBounds(false);
+	public BoutonCustom(double hauteur, double largeur, String nom, Color c) {
+
+		rec = new Rectangle();
+		rec.setHeight(hauteur * 0.165);
+		rec.setWidth(largeur * 0.48);
+		rec.setArcHeight(80);
+		rec.setArcWidth(80);
+		rec.setFill(Color.WHITE);
 		
+		rec.setOnMouseEntered(event -> {
+
+			rec.setEffect(ds);
+			cir.setEffect(ds);
+
+		});
+
+		rec.setOnMouseExited(event -> {
+			rec.setEffect(null);
+			cir.setEffect(null);
+		});
+
+		cir = new Circle(hauteur * 0.115, c);
+		cir.setOnMouseEntered(event -> {
+
+			cir.setEffect(ds);
+			rec.setEffect(ds);
+
+		});
+
+		cir.setOnMouseExited(event -> {
+			cir.setEffect(null);
+			rec.setEffect(null);
+		});
+
+		img = new ImageView(getClass().getClassLoader().getResource("images/" + nom + ".png").toString());
+		img.setFitHeight(hauteur * 0.15);
+		img.setFitWidth(hauteur * 0.15);
+		img.setTranslateX(-largeur * 0.175);
+		img.setTranslateY(hauteur * 0.038);
+
+		t = new Text(nom);
+		t.setFont(Font.loadFont("file:ressource/police/Munich.ttf", 32));
+		t.setTranslateY(hauteur * 0.063);
+		t.setTranslateX(-hauteur * 0.117);
+		t.setFill(c);
+
+		t.setPickOnBounds(false);
+		img.setMouseTransparent(true);
+
+		ds = new DropShadow();
+		ds.setOffsetY(10.0);
+		ds.setOffsetX(10.0);
+		ds.setColor(Color.BLACK);
+
+		this.setMargin(rec, new Insets(hauteur * 0.035, -largeur * 0.6, 0, 0));
+		this.getChildren().addAll(rec, cir, img, t);
+		this.setPickOnBounds(false);
+
 	}
 
 	public Text getT() {
@@ -84,4 +86,13 @@ public class BoutonCustom extends HBox {
 	public void setT(Text t) {
 		this.t = t;
 	}
+	
+	public ImageView getImg() {
+		return img;
+	}
+
+	public void setImg(ImageView img) {
+		this.img = img;
+	}
+
 }

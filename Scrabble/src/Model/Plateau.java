@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class Plateau implements Serializable {
 
 	private Case[][] plateau;
-	private LinkedList<Jeton> jetonNoValide;
+	private static LinkedList<Jeton> jetonNoValide;
 	private LinkedList<Jeton> listTamp;
 
 	private boolean motEnLigne;
@@ -363,7 +363,7 @@ public class Plateau implements Serializable {
 			jt.setValide(true);
 		}
 
-		this.affichePlateauJetonValide();
+		//this.affichePlateauJetonValide();
 	}
 
 	public boolean motMemeLigne() {
@@ -568,27 +568,28 @@ public class Plateau implements Serializable {
 			}
 		}
 
-		System.out.println("test1 = " + passeParJetonPose);
+		//System.out.println("test1 = " + passeParJetonPose);
 
 		if (!passeParJetonPose && extremMinY != 0) {
-			System.out.println("entre1" + plateau[ligne][extremMinY - 1].jetonValide());
+			//System.out.println("entre1" + plateau[ligne][extremMinY - 1].jetonValide());
 			passeParJetonPose = plateau[ligne][extremMinY - 1].jetonValide();
 		}
 
-		System.out.println("Lettre extremité gauche =" + plateau[ligne][extremMinY].getJ().getLettre());
-		System.out.println("Lettre extremité droite =" + plateau[ligne][extremMaxY].getJ().getLettre());
+	//	System.out.println("Lettre extremité gauche =" + plateau[ligne][extremMinY].getJ().getLettre());
+	//	System.out.println("Lettre extremité droite =" + plateau[ligne][extremMaxY].getJ().getLettre());
 
 		if(extremMinY!=0)
 		{
 			while (plateau[ligne][extremMinY - 1].jetonValide() && extremMinY > 0) {
 				listTamp.addFirst(plateau[ligne][extremMinY - 1].getJ());
 				extremMinY--;
+				if(extremMinY==0){break;}
 			}
 		}
 		
-		System.out.println("test2 = " + passeParJetonPose);
+	//	System.out.println("test2 = " + passeParJetonPose);
 		if (!passeParJetonPose && extremMaxY != 14) {
-			System.out.println("entre2 = " + plateau[ligne][extremMaxY + 1].jetonValide());
+		//	System.out.println("entre2 = " + plateau[ligne][extremMaxY + 1].jetonValide());
 			passeParJetonPose = plateau[ligne][extremMaxY + 1].jetonValide();
 		}
 
@@ -597,9 +598,10 @@ public class Plateau implements Serializable {
 			while (plateau[ligne][extremMaxY + 1].jetonValide() && extremMinY < 14) {
 				listTamp.addLast(plateau[ligne][extremMaxY + 1].getJ());
 				extremMaxY++;
+				if(extremMaxY==14){break;}
 			}
 		}
-		System.out.println("test3 = " + passeParJetonPose);
+	//	System.out.println("test3 = " + passeParJetonPose);
 
 		if(passeParJetonPose==false && jetonNoValide.size()>1)
 		{
@@ -650,6 +652,7 @@ public class Plateau implements Serializable {
 		while (plateau[extremMinX - 1][col].jetonValide() && extremMinX > 0) {
 			listTamp.addFirst(plateau[extremMinX - 1][col].getJ());
 			extremMinX--;
+			if(extremMinX==0){break;}
 		}
 
 		}
@@ -657,13 +660,14 @@ public class Plateau implements Serializable {
 			passeParJetonPose = plateau[extremMaxX + 1][col].jetonValide();
 		}
 
-		this.affichePlateauJetonValide();
+		//this.affichePlateauJetonValide();
 
 		if (extremMaxX != 14) {
 
 			while (plateau[extremMaxX + 1][col].jetonValide() && extremMaxX < 14) {
 				listTamp.addLast(plateau[extremMaxX + 1][col].getJ());
 				extremMaxX++;
+				if(extremMaxX==14){break;}
 			}
 
 		}
@@ -701,12 +705,12 @@ public class Plateau implements Serializable {
 	public LinkedList<Jeton> jouePremierTour() {
 
 		if (plateau[7][7].isJetonPresent()) {
-			System.out.println("passe par le centre");
+			//System.out.println("passe par le centre");
 			if (verifieMotEnLigne()) {
 
-				System.out.println("Mot en ligne");
+				//System.out.println("Mot en ligne");
 				if (this.verifMotContinuLigne()) {
-					System.out.println("Mot en continu");
+					//System.out.println("Mot en continu");
 					return listTamp;
 				}
 			} else if (verifieMotEnColonne()) {
@@ -716,7 +720,7 @@ public class Plateau implements Serializable {
 				}
 			} else {
 
-				System.out.print("Mot invalide");
+				//System.out.print("Mot invalide");
 
 			}
 
@@ -731,30 +735,30 @@ public class Plateau implements Serializable {
 	public LinkedList<Jeton> getMotPose() {
 		if (this.motMemeLigne()) 
 		{
-			System.out.println("Mot en ligne");
+			//System.out.println("Mot en ligne");
 			if (this.motContinuEnLigne(this.jetonNoValide.get(0).getX())) {
-				System.out.println("Mot continu en Ligne -->");
-				this.affichePlateauJetonValide();
+				//System.out.println("Mot continu en Ligne -->");
+				//this.affichePlateauJetonValide();
 				this.afficheListTamp();
 				this.motEnLigne = true;
 				return listTamp;
 			}
 		} 
 		else if (this.motMemeColonne()) {
-			System.out.println("Mot en colonne");
+			//System.out.println("Mot en colonne");
 			if (this.motContinuEnColonne(this.jetonNoValide.get(0).getY())) {
-				System.out.println("Mot continu en colonne -->");
-				this.affichePlateauJetonValide();
+				//System.out.println("Mot continu en colonne -->");
+				//this.affichePlateauJetonValide();
 				this.afficheListTamp();
 				this.motEnColonne = true;
 				return listTamp;
 			}
 		} else {
 
-			this.afficheJetonNoValide();
-			this.afficheListTamp();
+			//this.afficheJetonNoValide();
+			//this.afficheListTamp();
 
-			System.out.print("Mot invalide");
+			//System.out.print("Mot invalide");
 
 		}
 
@@ -773,7 +777,7 @@ public class Plateau implements Serializable {
 
 				this.afficheJetonNoValide();
 
-				System.out.print("Mot invalide");
+				//System.out.print("Mot invalide");
 
 			}
 		}
@@ -783,14 +787,16 @@ public class Plateau implements Serializable {
 	}
 
 	public LinkedList<Jeton> chercheVoisinMotParJt(Jeton jt) {
+		
 		LinkedList<Jeton> mot = new LinkedList<Jeton>();
 		LinkedList<Jeton> mot1 = new LinkedList<Jeton>();
 		LinkedList<Jeton> mot2 = new LinkedList<Jeton>();
+		
 		int x = jt.getX(), y = jt.getY(), xt, yt;
 
-		System.out.println("Mot en ligne : " + this.motEnLigne);
+		///System.out.println("Mot en ligne : " + this.motEnLigne);
 
-		System.out.println("Mot en colonne : " + this.motEnColonne);
+		//System.out.println("Mot en colonne : " + this.motEnColonne);
 
 		if(x!=0 && x!=14)
 		{
@@ -799,15 +805,20 @@ public class Plateau implements Serializable {
 				mot1 = new LinkedList<Jeton>();
 				mot1.add(jt);
 	
+				
 				while (plateau[xt - 1][y].jetonValide()) {
 					mot1.addFirst(plateau[xt - 1][y].getJ());
 					xt--;
+					
+					if(xt==0){break;}
 				}
 				xt = x;
 	
 				while (plateau[xt + 1][y].jetonValide()) {
 					mot1.addLast(plateau[xt + 1][y].getJ());
 					xt++;
+					
+					if(xt==14){break;}
 				}
 	
 				mot = mot1;
@@ -824,12 +835,14 @@ public class Plateau implements Serializable {
 				while (plateau[x][yt - 1].jetonValide()) {
 					mot2.addFirst(plateau[x][yt - 1].getJ());
 					yt--;
+					if(yt==0){break;}
 				}
 	
 				yt = y;
 				while (plateau[x][yt + 1].jetonValide()) {
 					mot2.addLast(plateau[x][yt + 1].getJ());
 					yt++;
+					if(yt==14){break;}
 				}
 	
 				mot = mot2;
@@ -894,6 +907,25 @@ public class Plateau implements Serializable {
 		}
 	}
 
+	public void affichePlateauTousLesJetons() {
+
+		for (int i = 0; i < 15; i++) {
+			for (int y = 0; y < 15; y++) {
+				if (plateau[i][y].isJetonPresent()) {
+					System.out.print("[ " + plateau[i][y].getJ().getLettre() + " ] ");
+				} else {
+					System.out.print("[ X ]");
+				}
+
+				if (y == 14) {
+					System.out.println("");
+				}
+
+			}
+		}
+	}
+
+	
 	public void afficheListJeton(LinkedList<Jeton> list) {
 		for (int i = 0; i < list.size(); i++) {
 			System.out.println("| " + list.get(i).getLettre() + " |  ");
@@ -912,6 +944,21 @@ public class Plateau implements Serializable {
 
 		System.out.println("");
 
+	}
+	
+	public void retireJetonNonValide()
+	{
+		for(int x=0;x<15;x++)
+		{
+			for(int y=0;y<15;y++)
+			{
+				if(plateau[x][y].isJetonPresent() && !plateau[x][y].jetonValide())
+				{
+					plateau[x][y].setJetonPresent(false);
+					plateau[x][y].setP(null);
+				}
+			}
+		}
 	}
 
 	public void videList() {

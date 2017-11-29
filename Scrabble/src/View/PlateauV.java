@@ -179,6 +179,14 @@ public class PlateauV extends StackPane {
 	}
 
 	
+	public Tuile[][] getPlateau() {
+		return plateau;
+	}
+
+	public void setPlateau(Tuile[][] plateau) {
+		this.plateau = plateau;
+	}
+
 	public Tuile getPositionJeton()
 	{
 		for(int i=0;i<15;i++)

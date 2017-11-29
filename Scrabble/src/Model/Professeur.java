@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Professeur {
+public class Professeur implements Serializable {
 
 	private ArrayList<Object> toutLesMots;
 	private ArrayList<Jeton> jetonEnMain;
