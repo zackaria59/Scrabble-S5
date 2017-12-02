@@ -73,6 +73,7 @@ public class ModeDeJeu1 extends StackPane  {
 		
 
 		imageButtonJoueur.setOnMouseClicked(e->{ 
+			
 			ModeDeJeuVsJoueurs mj2 = new ModeDeJeuVsJoueurs(stage);
 			mj2.setVisible(true);
 			Scene scene=new Scene(mj2);

@@ -60,26 +60,14 @@ public class Launcher extends Application{
 		
 		StackPane container=new StackPane();
 		Partie p=new Partie(joueurs,sac,plateau,true);
-		EchapMenu em=new EchapMenu(1920,1080,p);
 		FenetreJeu fj=new FenetreJeu();
-		em.setVisible(false);
-		fj.getChildren().add(em);
+		
 		ControllerPlateau cp =new ControllerPlateau(p,fj);
 		Accueil a = new Accueil(stage);
 		
 		container.getChildren().add(a);
 		
 		Scene scene=new Scene(container);
-		
-		scene.setOnKeyPressed(e->{
-		
-			if(e.getCode()==KeyCode.ESCAPE)
-			{
-				echap=!echap;
-				em.setVisible(echap);
-			}
-		});
-		
 		stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 		stage.setScene(scene);
 		stage.setHeight(height);

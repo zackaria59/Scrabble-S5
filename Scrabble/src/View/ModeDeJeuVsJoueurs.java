@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,7 +29,8 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 	private int largeur, hauteur;
 	private ImageView background;
 	private Stage stage2;
-	
+	private boolean echap;
+	private EchapMenu echapMenu;
 
 	public ModeDeJeuVsJoueurs(Stage stage) {
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -36,7 +38,7 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 		int width = (int) dimension.getWidth();
 		largeur = width;
 		hauteur = height;
-
+		echap=false;
 		this.stage2=stage;
 		
 		background = new ImageView(getClass().getClassLoader().getResource("images/backgroundAccueil.jpg").toString());
@@ -45,11 +47,6 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 		background.setPickOnBounds(false);
 		
 		VBox menu=new VBox();
-		
-		
-		
-		
-		
 		
 		ImageView imageButtonJouer=new ImageView(getClass().getClassLoader().getResource("images/etoile.png").toString());
 		imageButtonJouer.setFitHeight(height*0.10);
@@ -104,6 +101,9 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 			Partie p=null;
 			try {
 				p = new Partie(joueurs,sac,plateau,true);
+				echapMenu=new EchapMenu(largeur,hauteur,p);
+				echapMenu.setVisible(false);
+				fj.getChildren().add(echapMenu);
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -119,8 +119,18 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 				e1.printStackTrace();
 			}
 			
-			
 			Scene scene=new Scene(fj);
+			
+			scene.setOnKeyPressed(ee->{
+				
+				if(ee.getCode()==KeyCode.ESCAPE)
+				{
+					echap=!echap;
+					this.echapMenu.setVisible(echap);
+				}
+			});	
+			
+			
 			stage.setScene(scene);
 			stage.setHeight(hauteur);
 			stage.setWidth(largeur);
@@ -128,6 +138,7 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 			stage.setMaximized(true);
 			stage.show();
 		});
+		
 		
 		imageQuitterAccueil.setOnMouseEntered(e->{
 			DropShadow ds = new DropShadow();
