@@ -49,7 +49,7 @@ public class EchapMenu extends StackPane {
 		fenetre.setHeight(hauteur*0.6);
 		fenetre.setArcHeight(60);
 		fenetre.setArcWidth(60);
-		fenetre.setStroke(Color.BLUE);
+		fenetre.setStroke(Color.CHOCOLATE);
         fenetre.setStrokeWidth(10);
 		fenetre.setFill(Color.web("rgba(255,255,255,1)"));
 		
@@ -128,7 +128,7 @@ public class EchapMenu extends StackPane {
 		bouton2.getChildren().addAll(sauvegarderREC,sauvegarder);
 		bouton2.setAlignment(Pos.CENTER);
 		
-		Text charger=new Text("charger");
+		Text charger=new Text("Charger");
 		charger.setFont(Font.loadFont("file:ressource/police/Munich.ttf",45));
 		charger.setPickOnBounds(false);
 		
@@ -182,6 +182,26 @@ public class EchapMenu extends StackPane {
 		
 		sauvegarderREC.setOnMouseExited(e->{
 			sauvegarderREC.setEffect(null);
+		});
+		
+		quitterREC.setOnMouseEntered(e->{
+			quitterREC.setEffect(ds);
+		});
+		
+		quitterREC.setOnMouseExited(e->{
+			quitterREC.setEffect(null);
+		});
+		
+		quitterREC.setOnMousePressed(e->{
+			System.exit(0);
+		});
+		
+		chargerREC.setOnMouseEntered(e->{
+			chargerREC.setEffect(ds);
+		});
+		
+		chargerREC.setOnMouseExited(e->{
+			chargerREC.setEffect(null);
 		});
 		
 		

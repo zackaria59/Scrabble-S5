@@ -18,6 +18,7 @@ public class BoutonCustom extends HBox {
 	private ImageView img;
 	private Text t;
 	private DropShadow ds;
+	private boolean verrouille; 
 
 	public BoutonCustom(double hauteur, double largeur, String nom, Color c) {
 
@@ -60,11 +61,15 @@ public class BoutonCustom extends HBox {
 		img.setTranslateY(hauteur * 0.038);
 
 		t = new Text(nom);
-		t.setFont(Font.loadFont("file:ressource/police/Munich.ttf", 32));
 		t.setTranslateY(hauteur * 0.063);
 		t.setTranslateX(-hauteur * 0.117);
 		t.setFill(c);
-
+		if(nom.equals("Meilleur mot")){
+			t.setFont(Font.loadFont("file:ressource/police/Munich.ttf", hauteur*0.07));
+		}
+		else{
+			t.setFont(Font.loadFont("file:ressource/police/Munich.ttf", hauteur*0.08));
+		}
 		t.setPickOnBounds(false);
 		img.setMouseTransparent(true);
 
@@ -76,6 +81,8 @@ public class BoutonCustom extends HBox {
 		this.setMargin(rec, new Insets(hauteur * 0.035, -largeur * 0.6, 0, 0));
 		this.getChildren().addAll(rec, cir, img, t);
 		this.setPickOnBounds(false);
+		
+		
 
 	}
 
@@ -93,6 +100,14 @@ public class BoutonCustom extends HBox {
 
 	public void setImg(ImageView img) {
 		this.img = img;
+	}
+
+	public boolean isVerrouille() {
+		return verrouille;
+	}
+
+	public void setVerrouille(boolean verrouille) {
+		this.verrouille = verrouille;
 	}
 
 }

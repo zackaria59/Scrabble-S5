@@ -118,6 +118,15 @@ public class FenetreMessage extends StackPane {
 	
 	}
 	
+	public void afficheMessageFixe(String msg)
+	{
+		this.setVisible(true);
+		this.msg.setText(msg);
+		animation();
+		this.setVisible(false);
+	
+	}
+	
 	public void animation()
 	{
 		

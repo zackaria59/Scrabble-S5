@@ -10,6 +10,7 @@ public class Jeton implements Serializable {
 	private char lettre;
 	private int points;  // Le nombre de point que rapporte la lettre
 	private boolean valide;
+	private boolean joker;
 	
 	
 	public Jeton(char l)
@@ -99,6 +100,15 @@ public class Jeton implements Serializable {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public boolean isJoker() {
+		return joker;
+	}
+
+	public void setJoker(boolean joker) {
+		this.joker = joker;
+		this.points=0;
 	}
 	
 }

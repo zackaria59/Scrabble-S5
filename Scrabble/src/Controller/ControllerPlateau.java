@@ -244,7 +244,18 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 			pause.setOnFinished(event ->
 				{
 					try {
-						poseMotIA(((JoueurIA)j).joueTour(partie));
+						
+						LinkedList<Jeton> meilleurMot=((JoueurIA)j).joueTour(partie);
+						fj.getMc().verrouiller();
+						if(meilleurMot!=null){
+							poseMotIA(meilleurMot);
+							
+						}
+						else{
+							passeTour();
+							
+						}
+						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -253,6 +264,9 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 			);
 			pause.play();
 						
+		}
+		else{
+			fj.getMc().deverouiller();
 		}
 	}
 
@@ -341,6 +355,18 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		timer.playFromStart();
 	}
 	
+	public boolean finPartie(){
+		if(partie.getSac().getJetons().isEmpty() && partie.getJoueurQuiJoue().getJetons().isEmpty()){
+			Joueur vainqueur=partie.getVainqueurs();
+			fj.getFinPartie().afficheVainqueur(vainqueur);
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
+	
 	public void jouer()
 	{
 		if (this.premierTour) {
@@ -373,9 +399,12 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 							+ partie.getNbpointsCoupJoue() + " points !");
 					partie.getJoueurQuiJoue().addPoints(partie.getNbpointsCoupJoue());
 					partie.validJetonPose();
-					passeTour();
-					premierTour = false;
-					partie.setNbpointsCoupJoue(0);
+					if(!finPartie()){
+						passeTour();
+						premierTour = false;
+						partie.setNbpointsCoupJoue(0);
+					}
+					
 				} else {
 
 					partie.setNbpointsCoupJoue(0);
@@ -397,10 +426,10 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 		if (o instanceof BoutonCustom) {
 
-			if (((BoutonCustom) o).getT().getText().equals("Melanger")) {
+			if (((BoutonCustom) o).getT().getText().equals("Melanger") && ((BoutonCustom) o).isVerrouille()) {
 				this.melanger();
 									
-			} else if (((BoutonCustom) o).getT().getText().equals("Passer")) {
+			} else if (((BoutonCustom) o).getT().getText().equals("Passer") && ((BoutonCustom) o).isVerrouille()) {
 				try {
 					passeTour();
 				} catch (IOException e1) {
@@ -408,20 +437,29 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					e1.printStackTrace();
 				}
 			}
-			 else if (((BoutonCustom) o).getT().getText().equals("Quitter")) {
-				System.out.println("Quitter");	
+			 else if (((BoutonCustom) o).getT().getText().equals("Meilleur mot") && ((BoutonCustom) o).isVerrouille()) {
 				try {
-					aideProfesseur();
+					
+					int cptNbAide=partie.getJoueurQuiJoue().getCompteurAide();
+					if(cptNbAide>0){
+						aideProfesseur();
+						cptNbAide--;
+						fj.getFm().afficheMessage(""+cptNbAide);
+						partie.getJoueurQuiJoue().setCompteurAide(cptNbAide);
+					}
+					else{
+						fj.getFm().afficheMessage("Vous ne pouvez plus utiliser l'aide du Professeur !");
+						}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				 //System.exit(0);
 				}
-			 else if (((BoutonCustom) o).getT().getText().equals("Jouer")) {
+			 else if (((BoutonCustom) o).getT().getText().equals("Jouer") && ((BoutonCustom) o).isVerrouille()) {
 				jouer();
 
-			} else if (((BoutonCustom) o).getT().getText().equals("Reprendre")) {
+			} else if (((BoutonCustom) o).getT().getText().equals("Reprendre") && ((BoutonCustom) o).isVerrouille()) {
 				try {
 					reprendre();
 				} catch (IOException e1) {
@@ -430,9 +468,9 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 				}
 				partie.getPlateau().reprendre();
 
-			} else if (((BoutonCustom) o).getT().getText().equals("Dictionnaire")) {
+			} else if (((BoutonCustom) o).getT().getText().equals("Dictionnaire") && ((BoutonCustom) o).isVerrouille()) {
 				fj.getDico().setVisible(true);
-			} else if (((BoutonCustom) o).getT().getText().equals("Echanger")) {
+			} else if (((BoutonCustom) o).getT().getText().equals("Echanger") && ((BoutonCustom) o).isVerrouille()) {
 				fj.getEv().setInformation(partie.getSac(), partie.getJoueurQuiJoue());
 				fj.getEv().setVisible(true);
 			}

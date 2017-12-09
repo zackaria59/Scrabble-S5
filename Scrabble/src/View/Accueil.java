@@ -68,7 +68,7 @@ public class Accueil extends StackPane  {
             ds.setOffsetY(10.0);
             ds.setOffsetX(10.0);
             ds.setColor(Color.BLACK);
-            
+           
             imageButtonNewGame.setEffect(ds);
 			
 		});
@@ -82,15 +82,10 @@ public class Accueil extends StackPane  {
 		
 		      
 			ModeDeJeu1 mj1 = new ModeDeJeu1(stage);
-			mj1.setVisible(true);
-			Scene scene=new Scene(mj1);
-			stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-			stage.setScene(scene);
-			stage.setHeight(hauteur);
-			stage.setWidth(largeur);
-			stage.setFullScreen(true);
-			stage.setMaximized(true);
+			mj1.setVisible(true);	
+			stage.getScene().setRoot(mj1);
 			stage.show();
+			this.setVisible(false);
 		});
 			
 

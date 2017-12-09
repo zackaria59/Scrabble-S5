@@ -380,6 +380,17 @@ public class Partie implements Serializable {
 		return mot;
 	}
 	
+	public Joueur getVainqueurs(){
+		Joueur vainqueur=joueurs.get(0);
+		
+		for(int i=1; i<joueurs.size();i++){
+				if(!(vainqueur.getScore()>joueurs.get(i).getScore())){
+				vainqueur=joueurs.get(i);
+			}
+		}
+		return vainqueur;
+	}
+	
 	public void validJetonPose()
 	{
 		this.getPlateau().valideJeton();

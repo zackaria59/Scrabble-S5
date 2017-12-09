@@ -20,20 +20,29 @@ public class Joueur implements Serializable {
 		this.joueTour=false;
 		jetons=new ArrayList<Jeton>();
 		this.setIa(ia);
+		compteurAide=5;
 	}
 	
 	public void piocher(Sac sac)    // Le joueur tire un jeton du sac 
 	{
+		Jeton jetonPiocher=piocherUnJeton(sac);
 		
-		jetons.add(piocherUnJeton(sac));                // on ajoute le jeton dans la liste de jeton du joueur
+		if(jetonPiocher!=null){
+			jetons.add(jetonPiocher); // on ajoute le jeton dans la liste de jeton du joueur
+		}
 								 
 	}
 	
 	public Jeton piocherUnJeton(Sac sac)
 	{
-		int nbAleatoire=(int) (Math.random() * ( sac.getJetons().size() - 0 ));
-		Jeton jt=sac.getJetons().get(nbAleatoire);
-		sac.getJetons().remove(nbAleatoire);
+		Jeton jt=null;
+		
+		if(!sac.getJetons().isEmpty()){
+			int nbAleatoire=(int) (Math.random() * ( sac.getJetons().size() - 0 ));
+			jt=sac.getJetons().get(nbAleatoire);
+			sac.getJetons().remove(nbAleatoire);
+		}
+		
 		return jt;
 	}
 	

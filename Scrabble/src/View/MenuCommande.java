@@ -36,7 +36,7 @@ public class MenuCommande extends VBox {
         b2=new BoutonCustom(hauteur,largeur,"Echanger",Color.web("rgb(255,112,10)"));
         b3=new BoutonCustom(hauteur,largeur,"Passer",Color.web("rgb(0,179,61)"));
         b5=new BoutonCustom(hauteur,largeur,"Dictionnaire",Color.GOLD);
-        b4=new BoutonCustom(hauteur,largeur,"Quitter",Color.RED);
+        b4=new BoutonCustom(hauteur,largeur,"Meilleur mot",Color.RED);
        
         
         
@@ -82,4 +82,20 @@ public class MenuCommande extends VBox {
 		b3.setImg(new ImageView (getClass().getClassLoader().getResource("images/passer.png").toString()));
 	}
 	
+	public void verrouiller(){
+		b1.setVerrouille(false);
+		b2.setVerrouille(false);
+		b3.setVerrouille(false);
+		b4.setVerrouille(false);
+		b5.setVerrouille(false);
+
+	}
+	
+	public void deverouiller(){
+		b1.setVerrouille(true);
+		b2.setVerrouille(true);
+		b3.setVerrouille(true);
+		b4.setVerrouille(true);
+		b5.setVerrouille(true);
+	}
 }

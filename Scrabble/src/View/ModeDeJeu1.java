@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class ModeDeJeu1 extends StackPane  {
 	private int largeur, hauteur;
-	private ImageView background;
+	private ImageView background, buttonPrecedent;
 	private Stage stage2;
 	
 
@@ -55,7 +55,14 @@ public class ModeDeJeu1 extends StackPane  {
 		imageButtonOrdinateur.setFitHeight(height*0.10);
 		imageButtonOrdinateur.setFitWidth(width*0.25);	
 		
+		buttonPrecedent=new ImageView(getClass().getClassLoader().getResource("images/precedent.png").toString());
+		buttonPrecedent.setFitHeight(hauteur*0.08);
+		buttonPrecedent.setFitWidth(largeur*0.06);
+		
 		menu.getChildren().addAll(imageButtonJoueur,imageButtonOrdinateur);
+		
+		this.setAlignment(buttonPrecedent, Pos.BOTTOM_LEFT);
+		
 		
 		imageButtonJoueur.setOnMouseEntered(e->{
 			DropShadow ds = new DropShadow();
@@ -73,15 +80,10 @@ public class ModeDeJeu1 extends StackPane  {
 		
 
 		imageButtonJoueur.setOnMouseClicked(e->{ 
+			
 			ModeDeJeuVsJoueurs mj2 = new ModeDeJeuVsJoueurs(stage);
 			mj2.setVisible(true);
-			Scene scene=new Scene(mj2);
-			stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-			stage.setScene(scene);
-			stage.setHeight(hauteur);
-			stage.setWidth(largeur);
-			stage.setFullScreen(true);
-			stage.setMaximized(true);
+			stage.getScene().setRoot(mj2);
 			stage.show();
 		});
 		
@@ -102,19 +104,40 @@ public class ModeDeJeu1 extends StackPane  {
 		imageButtonOrdinateur.setOnMouseClicked(e->{
 			ModeDeJeuVsIA mjia = new ModeDeJeuVsIA(stage);
 			mjia.setVisible(true);
-			Scene scene=new Scene(mjia);
-			stage.setScene(scene);
-			stage.setHeight(hauteur);
-			stage.setWidth(largeur);
-			stage.setFullScreen(true);
-			stage.setMaximized(true);
+			stage.getScene().setRoot(mjia);
 			stage.show();
+			this.setVisible(false);
+		});
+		
+		buttonPrecedent.setOnMousePressed(e->{
+			
+			Accueil a = new Accueil(stage);
+			a.setVisible(true);	
+			stage.getScene().setRoot(a);
+			stage.show();
+	
+		});
+		
+		buttonPrecedent.setOnMouseEntered(e->{
+			
+			
+			DropShadow ds = new DropShadow();
+            ds.setOffsetY(10.0);
+            ds.setOffsetX(10.0);
+            ds.setColor(Color.BLACK);
+		
+            buttonPrecedent.setEffect(ds);
+            
+		});
+		
+		buttonPrecedent.setOnMouseExited(e->{
+			buttonPrecedent.setEffect(null);
 		});
 	
 		menu.setSpacing(hauteur*0.05);
 		menu.setAlignment(Pos.CENTER);
 		this.setPadding(new Insets(0.03 * hauteur, 0.03 * largeur, 0.03 * hauteur, 0.03 * largeur));
-		this.getChildren().addAll(background,menu);
+		this.getChildren().addAll(background,menu,buttonPrecedent);
 	
 	}
 

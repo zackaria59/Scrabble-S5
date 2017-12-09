@@ -332,7 +332,7 @@ public class JoueurIA extends Joueur implements Serializable{
 	
 	public void initialiseCombinaisonMotsEnMain()
 	{
-		for(int i=0;i<7;i++)
+		for(int i=0;i<jetons.size();i++)
 		{
 			getCombinaisonMotsEnMain2(this.getJetons().get(i).getLettre());
 		}
@@ -377,8 +377,8 @@ public class JoueurIA extends Joueur implements Serializable{
 			}
 				
 		}
-		
-		System.out.println("======================================================>>>>>"+meilleurMot+"  "+points+"   points !!!!  x="+meilleurMotJetons.get(0).getX()+" y="+meilleurMotJetons.get(0).getY()+"<<<<<================================================");
+	
+	
 		return meilleurMotJetons;
 	}
 	

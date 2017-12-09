@@ -36,56 +36,11 @@ public class FenetreJeu extends StackPane{
 	private FenetreMessage fm;
 	private Chronometre chrono;
 	private AfficheScoresAutreJoueurs afficheAutreJoueurs;
+	private FinPartie finPartie;
 	
 
-	public Chronometre getChrono() {
-		return chrono;
-	}
 
-	public void setChrono(Chronometre chrono) {
-		this.chrono = chrono;
-	}
 
-	public DictionnaireV getDico() {
-		return dico;
-	}
-
-	public EchangerV getEv() {
-		return ev;
-	}
-
-	public void setEv(EchangerV ev) {
-		this.ev = ev;
-	}
-
-	public void setDictionnaireV(DictionnaireV DictionnaireV) {
-		dico = DictionnaireV;
-	}
-
-	public JokerChoixLettre getJcl() {
-		return jcl;
-	}
-
-	public void setJcl(JokerChoixLettre jcl) {
-		this.jcl = jcl;
-	}
-
-	public MenuCommande getMc() {
-		return mc;
-	}
-
-	public void setMc(MenuCommande mc) {
-		this.mc = mc;
-	}
-
-	public PlateauV getPlateauV() {
-		return p;
-	}
-
-	public void setP(PlateauV p) {
-		this.p = p;
-	}
-	
 
 	public FenetreJeu() {
 		
@@ -148,12 +103,62 @@ public class FenetreJeu extends StackPane{
 		
 		chrono=new Chronometre(largeur,hauteur);
 		
-		
+		finPartie=new FinPartie(largeur,hauteur);
+		finPartie.setVisible(false);
 		
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));
-		this.getChildren().addAll(background,legende,p,ij,mc,jcl.getSp(),dico,ev,fm,chrono);
+		this.getChildren().addAll(background,legende,p,ij,mc,jcl.getSp(),dico,ev,chrono,fm,finPartie);
 	
 	}
+	
+	public Chronometre getChrono() {
+		return chrono;
+	}
+
+	public void setChrono(Chronometre chrono) {
+		this.chrono = chrono;
+	}
+
+	public DictionnaireV getDico() {
+		return dico;
+	}
+
+	public EchangerV getEv() {
+		return ev;
+	}
+
+	public void setEv(EchangerV ev) {
+		this.ev = ev;
+	}
+
+	public void setDictionnaireV(DictionnaireV DictionnaireV) {
+		dico = DictionnaireV;
+	}
+
+	public JokerChoixLettre getJcl() {
+		return jcl;
+	}
+
+	public void setJcl(JokerChoixLettre jcl) {
+		this.jcl = jcl;
+	}
+
+	public MenuCommande getMc() {
+		return mc;
+	}
+
+	public void setMc(MenuCommande mc) {
+		this.mc = mc;
+	}
+
+	public PlateauV getPlateauV() {
+		return p;
+	}
+
+	public void setP(PlateauV p) {
+		this.p = p;
+	}
+	
 	
 	public FenetreMessage getFm() {
 		return fm;
@@ -179,6 +184,15 @@ public class FenetreJeu extends StackPane{
 	{
 		return dico;
 	}
+	
+	public FinPartie getFinPartie() {
+		return finPartie;
+	}
+
+	public void setFinPartie(FinPartie finPartie) {
+		this.finPartie = finPartie;
+	}
+
 	
 	public ArrayList<JetonV> genereJetonV(ArrayList<Jeton> jetons)
 	{
