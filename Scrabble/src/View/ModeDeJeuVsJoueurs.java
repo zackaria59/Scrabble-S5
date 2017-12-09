@@ -90,6 +90,7 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 		flecheD.setTranslateY(hauteur*0.01);
 		flecheD.setTranslateX(largeur*0.01);
 		
+		
 		nbJoueurChoix=new Label("2");
 		nbJoueurChoix.setFont(Font.loadFont("file:ressource/police/LONSDALE.OTF",hauteur*0.05));
 		nbJoueurChoix.setTextFill(Color.rgb(246 ,225 ,204 ));
@@ -292,6 +293,7 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 			nomJoueur[i].setPickOnBounds(false);
 			nomJoueur[i].setPromptText("Nom du joueur "+(i+1)+"");
 			
+			
 			//nomJoueur[1].setText(Color.rgb(246 ,225 ,204 ));
 			
 			spContainerNomJoueur[i]=new StackPane();
@@ -378,7 +380,6 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 		buttonLancer.setOnMouseExited(e->{
 			buttonLancer.setEffect(null);
 		});
-		
 		/***************************************/
 		
 		flecheG.setOnMousePressed(e->{
