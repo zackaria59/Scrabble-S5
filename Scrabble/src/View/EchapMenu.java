@@ -2,12 +2,15 @@ package View;
 
 import java.awt.RenderingHints.Key;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Date;
 
+import Controller.ControllerPlateau;
 import Model.Partie;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
@@ -23,6 +26,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class EchapMenu extends StackPane {
@@ -31,8 +37,9 @@ public class EchapMenu extends StackPane {
 	private Text msg;
 	private VBox menu;
 
-	
-	public EchapMenu(double largeur,double hauteur,Partie partie)
+	private EchapMenu echapMenu;
+	private boolean echap;
+	public EchapMenu(double largeur,double hauteur,Partie partie,Stage stage)
 	{
 		
 		msg=new Text("");
@@ -116,6 +123,9 @@ public class EchapMenu extends StackPane {
 				e1.printStackTrace();
 			}
 			try {
+				partie.sauvegardePlateau=partie.getPlateau().getPlateau();
+				partie.getPlateau().affichePlateauJetonValide();
+				partie.getPlateau().videList();
 				oos.writeObject(partie);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -167,6 +177,7 @@ public class EchapMenu extends StackPane {
 		menu.setAlignment(Pos.CENTER);
 		menu.setSpacing(15);
 		VBox.setMargin(bouton, new Insets(hauteur*0.08,0,0,0));
+		echap=false;
 		
 		reprendreREC.setOnMouseEntered(e->{
 			reprendreREC.setEffect(ds);
@@ -204,7 +215,64 @@ public class EchapMenu extends StackPane {
 			chargerREC.setEffect(null);
 		});
 		
+		chargerREC.setOnMousePressed(e->{
+			
+			FileChooser fileChooser = new FileChooser();
+			 fileChooser.setTitle("Open Resource File");
+			 //fileChooser.setInitialDirectory(new File(getClass().getResource("sauvegarde").toString()));
+			 
+			        
+			 File selectedFile = fileChooser.showOpenDialog(stage);
+			 if (selectedFile != null) {
+			    //stage.display(selectedFile);
+			 }
+			
+			System.out.println(selectedFile);
+			FileInputStream fis=null;
+			try {
+				fis = new FileInputStream(selectedFile);
+				
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			ObjectInputStream ois = null;
+			try {
+				ois = new ObjectInputStream(fis);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			try {
+				Partie p=(Partie) ois.readObject();
+				System.out.println("Pseudo "+p.getJoueurs().get(0).getPseudo());
+				
+				FenetreJeu fj=new FenetreJeu(stage);
+				ControllerPlateau cp=new ControllerPlateau(p,fj,true);
+				echapMenu=new EchapMenu(largeur,hauteur,p,stage);
+				echapMenu.setVisible(false);
+				fj.getChildren().add(echapMenu);
+				fj.setVisible(true);
+				stage.getScene().setRoot(fj);
+				
+				stage.getScene().setOnKeyPressed(ee->{
+					
+					if(ee.getCode()==KeyCode.ESCAPE)
+					{
+						echap=!echap;
+						this.echapMenu.setVisible(echap);
+					}
+				});	
+				
+			} catch (ClassNotFoundException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		
+		
+
 		this.getChildren().addAll(background,fenetre,menu);
 	}
 	

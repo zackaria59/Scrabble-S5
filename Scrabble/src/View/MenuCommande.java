@@ -87,7 +87,7 @@ public class MenuCommande extends VBox {
 		b2.setVerrouille(false);
 		b3.setVerrouille(false);
 		b4.setVerrouille(false);
-		b5.setVerrouille(false);
+		//b5.setVerrouille(false);
 
 	}
 	

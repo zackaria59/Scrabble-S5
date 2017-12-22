@@ -54,7 +54,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 	private ArrayList<Tuile> postionJetonPose = new ArrayList<Tuile>();
 	private JoueurIA professeur;
 	
-	public ControllerPlateau(Partie partie, FenetreJeu fj) throws IOException {
+	public ControllerPlateau(Partie partie, FenetreJeu fj,boolean charger) throws IOException {
 		
 		dico=new Model.Dictionnaire();
 		this.partie = partie;
@@ -68,20 +68,32 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		fj.getEv().setCp(this);
 
 		fj.setAfficheAutreJoueurs(partie.getNbJoueur() - 1);
-		setJoueurQuijoue(partie.getJoueurs().get(0));
-
+		
+		
 		premierTour = true;
 		lettreJokerChoisi = false;
 
 		professeur=new JoueurIA(4,"ordi",0,4);
-		professeur.piocherDebutPartie(partie.getSac());
 		professeur.setDico(dico);
 		
 		this.insertDicoIA(dico);
+
+		if(!charger)
+			setJoueurQuijoue(partie.getJoueurs().get(0));
+			else{
+				partie.setPlateau(new Plateau());
+				setJoueurQuijoue(partie.getJoueurQuiJoue());
+				
+				partie.getPlateau().setPlateau(partie.sauvegardePlateau);
+				this.affichePlateau();
+				premierTour=false;
+			}
+
 		
 		if (partie.isOptionTimer()) {
 			tempRestant = 60;
 			chronoActif();
+			fj.getChrono().setVisible(true);
 		}
 		// DesignePremierJoueur();
 	}
@@ -117,34 +129,47 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		}
 	}
 
-	public void poseMotIA(LinkedList<Jeton> linkedList)
+	public void poseMotIA(LinkedList<Jeton> linkedList, Joueur IA)
 	{
 				
 		int x,y;
+		
 		for(Jeton jt:linkedList)
 		{
-			x=-500;
-			y=-500;
 			
-			Tuile t=fj.getPlateauV().getPlateau()[jt.getX()][jt.getY()];
-			
-			
-			ImageView img = new ImageView(getClass().getClassLoader()
-					.getResource("images/jetons/" + jt.getLettre() + ".png").toString());
-			img.setFitHeight(((Tuile) t).getRec().getHeight() - 1);
-			img.setFitWidth(((Tuile) t).getRec().getWidth() - 1);
-		    t.getContainer().getChildren().add(img);
+			double[] coordonnee=new double[2];
+		
+		Tuile t=fj.getPlateauV().getPlateau()[jt.getX()][jt.getY()];
+		
+		ImageView img = new ImageView(getClass().getClassLoader()
+				.getResource("images/jetons/" + jt.getLettre() + ".png").toString());
+		img.setFitHeight(((Tuile) t).getRec().getHeight() - 1);
+		img.setFitWidth(((Tuile) t).getRec().getWidth() - 1);
+	    t.getContainer().getChildren().add(img);
 
-			 t.setC(jt.getLettre());
-			this.postionJetonPose.add((Tuile) t);
-			partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
-			partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre());
+		 t.setC(jt.getLettre());
+		this.postionJetonPose.add((Tuile) t);
+		
+		
+		if(jt.isJoker()){
+			IA.removeJetonByChar('^');
+			partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),true);
+			fj.getIj().removeJetonByChar('^');
+		}
+			else{
+				IA.removeJetonByChar(jt.getLettre());
+				partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),false);
+			}
+		
+		
+		coordonnee=fj.getIj().getCoordonneJeton(jt.getLettre());
+		
+		if(!jt.isJoker())
+		fj.getIj().removeJetonByChar(jt.getLettre());
 			
-			fj.getIj().removeJetonByChar(jt.getLettre());
-			System.out.println("x="+jt.getX()+"  y="+jt.getY());
 			
-			img.setTranslateX((-960));
-			img.setTranslateY(-520);
+			img.setTranslateX(-1000);
+			img.setTranslateY(0);
 			
 			TranslateTransition tt = new TranslateTransition();
 			tt.setToX(img.getLayoutX());
@@ -153,8 +178,10 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 			
 			tt.setByY(1);
 			tt.setNode(img);
-			tt.setDuration(Duration.seconds(1.2));
+			tt.setDuration(Duration.seconds(1.4));
 			tt.play();
+			
+			
 		}
 	
 		Timeline timer2 = new Timeline();
@@ -183,6 +210,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		ImageView imgJeton;
 		int x,y;
 		int cpt=0;
+		
 		for(Jeton jt:meilleurMot)
 		{
 			double[] coordonnee=new double[2];
@@ -197,12 +225,24 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 			 t.setC(jt.getLettre());
 			this.postionJetonPose.add((Tuile) t);
-			partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
-			partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre());
+			
+			
+			if(jt.isJoker()){
+				partie.getJoueurQuiJoue().removeJetonByChar('^');
+				partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),true);
+				fj.getIj().removeJetonByChar('^');
+			}
+				else{
+					partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
+					partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),false);
+				}
+			
 			
 			coordonnee=fj.getIj().getCoordonneJeton(jt.getLettre());
+			
+			if(!jt.isJoker())
 			fj.getIj().removeJetonByChar(jt.getLettre());
-			System.out.println("x="+jt.getX()+"  y="+jt.getY());
+			
 			
 			img.setTranslateX(-1000);
 			img.setTranslateY(0);
@@ -240,15 +280,16 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 		fj.getAfficheAutreJoueurs().setJoueurs(js);
 	
 		if(j.isIa()){
+			fj.getMc().verrouiller();
 			PauseTransition pause = new PauseTransition(Duration.seconds(2));
 			pause.setOnFinished(event ->
 				{
 					try {
 						
 						LinkedList<Jeton> meilleurMot=((JoueurIA)j).joueTour(partie);
-						fj.getMc().verrouiller();
+					
 						if(meilleurMot!=null){
-							poseMotIA(meilleurMot);
+							poseMotIA(meilleurMot,j);
 							
 						}
 						else{
@@ -295,7 +336,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 
 			Jeton jt = new Jeton(t.getC());
 			t.setC('1');
-			System.out.println(jt.getLettre());
+			
 			partie.getJoueurQuiJoue().getJetons().add(jt);
 		}
 
@@ -444,7 +485,6 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					if(cptNbAide>0){
 						aideProfesseur();
 						cptNbAide--;
-						fj.getFm().afficheMessage(""+cptNbAide);
 						partie.getJoueurQuiJoue().setCompteurAide(cptNbAide);
 					}
 					else{
@@ -454,7 +494,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				 //System.exit(0);
+				 
 				}
 			 else if (((BoutonCustom) o).getT().getText().equals("Jouer") && ((BoutonCustom) o).isVerrouille()) {
 				jouer();
@@ -490,6 +530,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					JetonV jt = ((JetonV) o);
 
 					if (jt.getLettre() == '^') {
+						
 						this.fj.getJcl().getSp().setVisible(true);
 						this.fj.getJcl().animation();
 						tuileJetonJoker = (Tuile) t;
@@ -505,14 +546,13 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 						((Tuile) t).setC(jt.getLettre());
 						this.postionJetonPose.add((Tuile) t);
 						partie.getJoueurQuiJoue().removeJetonByChar(jt.getLettre());
-						partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre());
+						partie.getPlateau().setJeton(((Tuile) t).getX(), ((Tuile) t).getY(), jt.getLettre(),false);
 					}
 
 					fj.getMc().activerBoutonReprendre();
 					jt.setVisible(false);
 					fj.getMc().activerBoutonJouer();
 				} else {
-					System.out.println("======>  " + ((JetonV) o).getXinitiale());
 
 					TranslateTransition tt = new TranslateTransition();
 					tt.setToX(((JetonV) o).getXinitiale());
@@ -522,12 +562,12 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					tt.play();
 				}
 			} else if (e.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
-				System.out.println("Hi" + ((JetonV) o).isJetonPourEchanger());
+				
 
 				if (((JetonV) o).isJetonPourJoker()) 
 				{
 					this.lettrejokChoisi = ((JetonV) o).getLettre();
-					System.out.println("a clicke sur un jeton joker");
+					
 					this.lettreJokerChoisi = true;
 
 					ImageView img = new ImageView(getClass().getClassLoader()
@@ -540,7 +580,7 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 					this.postionJetonPose.add((Tuile) tuileJetonJoker);
 
 					partie.getJoueurQuiJoue().removeJetonByChar('^');
-					partie.getPlateau().setJeton(tuileJetonJoker.getX(), tuileJetonJoker.getY(), lettrejokChoisi);
+					partie.getPlateau().setJeton(tuileJetonJoker.getX(), tuileJetonJoker.getY(), lettrejokChoisi,true);
 
 					this.fj.getJcl().getSp().setVisible(false);
 				} 
@@ -561,5 +601,26 @@ public class ControllerPlateau implements EventHandler<MouseEvent> {
 			}
 		}
 
+	}
+	
+	public void affichePlateau()
+	{
+		partie.getPlateau().affichePlateauJetonValide();
+		for(int x=0;x<15;x++)
+			for(int y=0;y<15;y++)
+			{
+				
+				if(partie.getPlateau().getPlateau()[x][y].jetonValide())
+				{
+					fj.getPlateauV().getPlateau()[x][y].isJetonPresent();
+					fj.getPlateauV().getPlateau()[x][y].setC(partie.getPlateau().getPlateau()[x][y].getJ().getLettre());
+					ImageView jtv=new ImageView(getClass().getClassLoader().getResource("images/jetons/"+partie.getPlateau().getPlateau()[x][y].getJ().getLettre()+".png").toString());
+					jtv.setFitHeight(60);
+					jtv.setFitWidth(60);
+					fj.getPlateauV().getPlateau()[x][y].getContainer().getChildren().add(jtv);
+				}
+			}
+		
+		partie.validJetonPose();
 	}
 }

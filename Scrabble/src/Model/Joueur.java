@@ -10,7 +10,7 @@ public class Joueur implements Serializable {
 	protected int score;
 	protected ArrayList<Jeton> jetons;
 	protected boolean joueTour;
-	private int compteurAide;
+	public int compteurAide;
 	private boolean ia;
 	
 	public Joueur(int id, String pseudo,int score,boolean ia){
@@ -20,7 +20,7 @@ public class Joueur implements Serializable {
 		this.joueTour=false;
 		jetons=new ArrayList<Jeton>();
 		this.setIa(ia);
-		compteurAide=5;
+		compteurAide=0;
 	}
 	
 	public void piocher(Sac sac)    // Le joueur tire un jeton du sac 
@@ -28,7 +28,12 @@ public class Joueur implements Serializable {
 		Jeton jetonPiocher=piocherUnJeton(sac);
 		
 		if(jetonPiocher!=null){
+			if(this.getJetonByChar('^')!=null && jetonPiocher.getLettre()=='^'){
+				piocher(sac);
+			}
+			else{
 			jetons.add(jetonPiocher); // on ajoute le jeton dans la liste de jeton du joueur
+			}
 		}
 								 
 	}
@@ -106,6 +111,9 @@ public class Joueur implements Serializable {
 	
 	public void removeJetonByChar(char c)
 	{
+		
+		
+		
 		for(int i=0;i<jetons.size();i++)
 		{
 			if(jetons.get(i).getLettre()==c)
@@ -114,6 +122,7 @@ public class Joueur implements Serializable {
 				break;
 			}
 		}
+		
 	}
 	
 	public String getPseudo(){
@@ -139,7 +148,7 @@ public class Joueur implements Serializable {
 	public void addPoints(int points)
 	{
 		
-		System.out.println("\n\nScore + points = "+score+" + "+points+" = "+(score+points));
+		
 		this.score=this.score+points;
 	}
 	

@@ -11,7 +11,7 @@ public class JoueurIA extends Joueur implements Serializable{
 	Plateau plateau;
 	ArrayList<String> combinaisonMot;
 	ArrayList<Mot> motPoseValide;
-	Dictionnaire dico;
+    transient Dictionnaire dico;
 	int nbpointsCoupJoue;
 	ArrayList<Object> motEtPoint;
 	int difficulte;
@@ -26,18 +26,19 @@ public class JoueurIA extends Joueur implements Serializable{
 	}
 	
 	public LinkedList<Jeton> joueTour(Partie partie) throws IOException{
-		intialiseToutMotsPosable(partie.getPlateau(),partie);
 		
+		intialiseToutMotsPosable(partie.getPlateau(),partie);
 		LinkedList<Jeton> motChoisi=choisiMotParDifficulte(this.difficulte);
-		System.out.println(motChoisi);
+		
 		return motChoisi;
 	}
+	
 	
 	public LinkedList<Jeton> choisiMotParDifficulte(int difficulte)
 	{
 		Random rand=new Random();
 		
-		System.out.println("mot et point taille ="+motEtPoint.size());
+		
 		if(difficulte==1){
 			ArrayList<LinkedList<Jeton>> listMots=new ArrayList<LinkedList<Jeton>>();
 			
@@ -50,9 +51,21 @@ public class JoueurIA extends Joueur implements Serializable{
 				}
 			}
 			
+			if(listMots.size()<=1)
+			{
+				return this.trouveMeilleurMot();
+			}
+			
+			int random=rand.nextInt(listMots.size()-1);
+			
+			if(random>=0)
 			return listMots.get(rand.nextInt(listMots.size()-1));
+			else{
+				return listMots.get(0);
+			}
 		}
 		else if(difficulte==2){
+			
 			ArrayList<LinkedList<Jeton>> listMots=new ArrayList<LinkedList<Jeton>>();
 			
 			for(Object m:motEtPoint)
@@ -63,9 +76,21 @@ public class JoueurIA extends Joueur implements Serializable{
 				{
 					listMots.add((LinkedList<Jeton>) tab[2]);
 				}
+			 
 			}
 			
+			if(listMots.size()<=1)
+			{
+				return this.trouveMeilleurMot();
+			}
+			
+			int random=rand.nextInt(listMots.size()-1);
+			
+			if(random>=0)
 			return listMots.get(rand.nextInt(listMots.size()-1));
+			else{
+				return listMots.get(0);
+			}
 		}
 		else if(difficulte==3){
 			ArrayList<LinkedList<Jeton>> listMots=new ArrayList<LinkedList<Jeton>>();
@@ -74,13 +99,25 @@ public class JoueurIA extends Joueur implements Serializable{
 			{
 				Object[] tab=(Object[])m;
 				
-				if(19<(int)tab[1] && (int)tab[1]<75)
+				if(19<(int)tab[1])
 				{
 					listMots.add((LinkedList<Jeton>) tab[2]);
 				}
+				
 			}
 			
-			return listMots.get(rand.nextInt(listMots.size()-1));
+			 if(listMots.size()==0)
+				{ 
+					return this.trouveMeilleurMot();
+				}
+			
+			 int random=rand.nextInt(listMots.size()-1);
+				
+				if(random>=0)
+				return listMots.get(rand.nextInt(listMots.size()-1));
+				else{
+					return listMots.get(0);
+				}
 		}
 		else if(difficulte==4){
 			
@@ -120,6 +157,7 @@ public class JoueurIA extends Joueur implements Serializable{
 		
 	}
 	
+	// Renvoie tous les mots qui sont déjà posé et validé sur le plateau
 	public ArrayList<Mot> getToutlesMotsPlateau()
 	{
 		ArrayList<Mot> listMots=new ArrayList<Mot>();
@@ -132,7 +170,6 @@ public class JoueurIA extends Joueur implements Serializable{
 			
 			if(!listMotsTamp.isEmpty())
 			{
-				System.out.println("KLO");
 				listMots.addAll(listMotsTamp);
 			}
 		}
@@ -150,6 +187,7 @@ public class JoueurIA extends Joueur implements Serializable{
 		return listMots;
 	}
 	
+	//
 	private ArrayList<Mot> getMotsParColonne(int colonne) {
 		
 		ArrayList<Mot> mots=new ArrayList<Mot>();
@@ -253,11 +291,11 @@ public class JoueurIA extends Joueur implements Serializable{
 						if(cpt==15)break;
 					}
 				
-				System.out.print("taille du mot = "+mot.size());
+				
 				
 				for(Jeton jt: mot)
 				{
-					System.out.print("  "+jt.getLettre()+" |");
+					//System.out.print("  "+jt.getLettre()+" |");
 				}
 				
 				
@@ -342,38 +380,81 @@ public class JoueurIA extends Joueur implements Serializable{
 	
 	public void getCombinaisonMotsEnMain2(char c)
 	{
-		ArrayList<String> motsTamp=new ArrayList<String>();
+		ArrayList<String> listMotsTamp=new ArrayList<>();
 		
-		for(String s:this.combinaisonMot)
+		ArrayList<String> motsTamp=new ArrayList<String>();
+		boolean joker=false;
+		
+		if(c=='^')
+			joker=true;
+		
+		if(!joker)
 		{
-			motsTamp.add(new String(c+s));
-			motsTamp.add(new String(s+c));
-			
-			for(int i=0;i<s.length()-1;i++)
+			for(String s:this.combinaisonMot)
 			{
-				motsTamp.add(s.substring(0, i+1)+c+s.substring(i+1));
+				motsTamp.add(new String(c+s));
+				motsTamp.add(new String(s+c));
+				
+				for(int i=0;i<s.length()-1;i++)
+				{
+					if(s.charAt(i)!='^'){
+					motsTamp.add(s.substring(0, i+1)+c+s.substring(i+1));}
+					
+	
+				}
+			}
+			this.combinaisonMot.addAll(motsTamp);
+			this.combinaisonMot.add(""+c);
+		}
+		else{
+			System.out.println(combinaisonMot.toString());
+			for(int i=65;i<=65;i++)
+			{
+				
+				for(String s:combinaisonMot)
+				{
+					motsTamp.add(new String(""+'^'+(char)i+s));
+					motsTamp.add(new String(s+'^'+(char)i));
+					
+					for(int y=0;y<s.length()-1;y++)
+					{
+						
+						motsTamp.add(s.substring(0, y+1)+'^'+(char)i+s.substring(y+1));
+					}
+				}
+				
+				listMotsTamp.addAll(motsTamp);
+				listMotsTamp.add(""+'^'+(char)i);
+				motsTamp.clear();
+					
+			}
+				
+				combinaisonMot.addAll(listMotsTamp);
+				System.out.println(combinaisonMot.toString());
+				listMotsTamp.clear();
+				
+				
 			}
 		}
-		this.combinaisonMot.addAll(motsTamp);
-		this.combinaisonMot.add(""+c);
 		
-	}
+	
 	
 	public LinkedList<Jeton> trouveMeilleurMot()
 	{
 		int points=0;
 		String meilleurMot = null;
 		LinkedList<Jeton> meilleurMotJetons = null;
+		
 		for(int i=0;i<this.motEtPoint.size();i++)
 		{
 			Object[] tab=(Object[]) motEtPoint.get(i);
-			System.out.println(tab[0]+" "+tab[1]+" points");
+			//System.out.println(tab[0]+" "+tab[1]+" points");
 			if(points<(int)tab[1])
 			{
 				meilleurMot=(String)tab[0];
 				points=(int)tab[1];
 				 meilleurMotJetons=(LinkedList<Jeton>) tab[2];
-				 System.out.println(meilleurMotJetons.toString());
+				// System.out.println(meilleurMotJetons.toString());
 			}
 				
 		}
@@ -390,5 +471,13 @@ public class JoueurIA extends Joueur implements Serializable{
 		
 		
 		return this.trouveMeilleurMot();
+	}
+
+	public int getDifficulte() {
+		return difficulte;
+	}
+
+	public void setDifficulte(int difficulte) {
+		this.difficulte = difficulte;
 	}
 }

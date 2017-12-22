@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class FinPartie extends StackPane{
 
@@ -22,7 +23,7 @@ public class FinPartie extends StackPane{
 	
 	private double largeur,hauteur,fenX,fenY,vbX,vbY;
 	
-	public FinPartie(double largeur,double hauteur)
+	public FinPartie(double largeur,double hauteur,Stage stage)
 	{
 		this.largeur=largeur;
 		this.hauteur=hauteur;
@@ -68,6 +69,10 @@ public class FinPartie extends StackPane{
 		});
 		
 		valider.setOnMouseClicked(e->{
+			Accueil a=new Accueil(stage);
+			
+			stage.getScene().setRoot(a);
+			stage.show();
 			this.setVisible(false);
 		});
 		

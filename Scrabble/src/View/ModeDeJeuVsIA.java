@@ -40,11 +40,11 @@ public class ModeDeJeuVsIA extends StackPane  {
 	private Stage stage;
 	private int nombreJoueur;
 	private DropShadow ds;
-	private Text titre,joueur[];
+	private Text titre,joueur[],difficulteT;
 	private TextField nomJoueur[];
 
-	private Label nbJoueurChoix;
-	private ImageView flecheG,flecheD,containerChoixNbJ,backgroundNomJoueur[],buttonPrecedent,buttonLancer;
+	private Label nbJoueurChoix,ChoixDifficulte;
+	private ImageView flecheD2,flecheG2,flecheG,flecheD,containerChoixNbJ,backgroundNomJoueur[],buttonPrecedent,buttonLancer;
 	
 	private StackPane spChoixNbJoueur,spContainerNomJoueur[];
 	private HBox containerChoixNbJoueur,containerInfoJoueur[];
@@ -52,6 +52,8 @@ public class ModeDeJeuVsIA extends StackPane  {
 	private VBox containerInfoToutLesJoueurs;
 	
 	private ToggleButtonSwitch buttonSwitch,buttonSwitch2;
+	
+	private int difficulte=1;
 	
 	public ModeDeJeuVsIA(Stage stage) {
 		
@@ -115,8 +117,42 @@ public class ModeDeJeuVsIA extends StackPane  {
 		containerChoixNbJoueur.setPickOnBounds(false);
 		
 		/**********************************************************************************************/
-
 		
+		HBox hb=new HBox();
+		
+		difficulteT=new Text("Difficulte");
+		difficulteT.setFont(Font.loadFont("file:ressource/police/LONSDALE.OTF",hauteur*0.05));
+		difficulteT.setFill(Color.rgb(246 ,225 ,204 ));
+		difficulteT.setPickOnBounds(false);
+		difficulteT.setTranslateX(-largeur*0.05);
+		
+		flecheG2 = new ImageView(getClass().getClassLoader().getResource("images/moins.png").toString());
+		flecheG2.setFitHeight(hauteur/23);
+		flecheG2.setFitWidth(largeur/23);
+		flecheG2.setTranslateY(hauteur*0.01);
+		flecheG2.setTranslateX(-largeur*0.01);
+		
+		
+		flecheD2=new ImageView(getClass().getClassLoader().getResource("images/plus.png").toString());
+		flecheD2.setFitHeight(hauteur/23);
+		flecheD2.setFitWidth(largeur/23);
+		flecheD2.setTranslateY(hauteur*0.01);
+		flecheD2.setTranslateX(largeur*0.01);
+		
+		ImageView containerChoixDifficulte=new ImageView(getClass().getClassLoader().getResource("images/caseNomJoueur.png").toString());
+		containerChoixDifficulte.setFitHeight(hauteur*0.07);
+		containerChoixDifficulte.setFitWidth(largeur*0.15);
+		
+		ChoixDifficulte=new Label("Facile");
+		ChoixDifficulte.setFont(Font.loadFont("file:ressource/police/LONSDALE.OTF",hauteur*0.05));
+		ChoixDifficulte.setTextFill(Color.rgb(246 ,225 ,204 ));
+		ChoixDifficulte.setPickOnBounds(false);
+		
+		StackPane sp=new StackPane();
+		sp.getChildren().addAll(ChoixDifficulte,containerChoixDifficulte);
+		hb.setTranslateX(largeur*0.39);
+		hb.getChildren().addAll(difficulteT,flecheG2,sp,flecheD2);
+	
 		/************************* La vue qui affiche le nom des joueurs (dynamic en fonction du nombre selectionné **/
 		
 		containerInfoToutLesJoueurs=new VBox();
@@ -188,7 +224,7 @@ public class ModeDeJeuVsIA extends StackPane  {
 		/**********************************************************************************************/
 
 		
-		option.getChildren().addAll(optionText,containerOption1,containerOption2);
+		option.getChildren().addAll(optionText,containerOption1,containerOption2,hb);
 		
 		buttonPrecedent=new ImageView(getClass().getClassLoader().getResource("images/precedent.png").toString());
 		buttonPrecedent.setFitHeight(hauteur*0.08);
@@ -210,15 +246,21 @@ public class ModeDeJeuVsIA extends StackPane  {
 	
 	private void lancerParti() {
 		
-		FenetreJeu fj =new FenetreJeu();
+		FenetreJeu fj =new FenetreJeu(stage);
 		fj.setVisible(true);
 		
 		boolean timer=false;
-		
+		boolean aideProf=false;
 		if(buttonSwitch.isOn)timer=true;
 		else{
 			timer=false;
 		}
+		
+		if(buttonSwitch2.isOn)aideProf=true;
+		else{
+			aideProf=false;
+		}
+		
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
 		
 		for(int i=0;i<nombreJoueur;i++)
@@ -226,7 +268,7 @@ public class ModeDeJeuVsIA extends StackPane  {
 			if(i==0)
 			joueurs.add(new Joueur(1,nomJoueur[i].getText(),0,false));
 			else{
-				joueurs.add(new JoueurIA(1,nomJoueur[i].getText(),0,4));
+				joueurs.add(new JoueurIA(1,nomJoueur[i].getText(),0,difficulte));
 			}
 		}
 		
@@ -240,8 +282,8 @@ public class ModeDeJeuVsIA extends StackPane  {
 		
 		Partie p=null;
 		try {
-			p = new Partie(joueurs,sac,plateau,timer);
-			echapMenu=new EchapMenu(largeur,hauteur,p);
+			p = new Partie(joueurs,sac,plateau,timer,aideProf);
+			echapMenu=new EchapMenu(largeur,hauteur,p,stage);
 			echapMenu.setVisible(false);
 			fj.getChildren().add(echapMenu);
 		} catch (FileNotFoundException e1) {
@@ -253,7 +295,7 @@ public class ModeDeJeuVsIA extends StackPane  {
 		}
 	
 		try {
-			ControllerPlateau cp =new ControllerPlateau(p,fj);
+			ControllerPlateau cp =new ControllerPlateau(p,fj,false);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -408,5 +450,42 @@ public class ModeDeJeuVsIA extends StackPane  {
 			nbJoueurChoix.setText(""+nombreJoueur);
 			}
 		});
+		
+		/***************************************/
+		
+		flecheG2.setOnMousePressed(e->{
+			if(difficulte>1)
+			this.difficulte-=1;
+			ChoixDifficulte.setText(getMotByDifficulte(difficulte));
+		});
+		
+		/****************************************/
+		
+		flecheD2.setOnMousePressed(e->{
+			if(difficulte<4)
+				this.difficulte+=1;
+			ChoixDifficulte.setText(getMotByDifficulte(difficulte));
+		});
+		
+	}
+	
+	public String getMotByDifficulte(int a)
+	{
+		if(a==1)
+		{
+			return "Facile";
+		}
+		else if(a==2)
+		{
+			return "Moyen";
+		}
+		else if(a==3)
+		{
+			return "Difficile";
+		}
+		else 
+		{
+			return "Professeur";
+		}
 	}
 }

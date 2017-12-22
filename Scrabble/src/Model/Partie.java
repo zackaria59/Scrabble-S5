@@ -11,13 +11,15 @@ public class Partie implements Serializable {
 	private ArrayList<Joueur> joueurs;
 	private Joueur joueurQuiJoue;
 	private Sac sac;
-	private static Plateau plateau;
-	private Dictionnaire dico;
+	private static  Model.Plateau plateau;
+	private transient Dictionnaire dico;
 	private String erreurMsg;
 	private boolean joueurJoueTour;
 	private boolean optionTimer;
 	private int nbJoueur;
 	private int nbpointsCoupJoue=0;
+	
+	public Case[][] sauvegardePlateau;
 	
 	public String getErreurMsg() {
 		return erreurMsg;
@@ -35,14 +37,15 @@ public class Partie implements Serializable {
 		this.erreurMsg = erreurMsg;
 	}
 
-	public Partie(ArrayList<Joueur> joueurs, Sac sac, Plateau plateau,boolean activeTimer) throws IOException {
+	public Partie(ArrayList<Joueur> joueurs, Sac sac, Plateau plateau,boolean activeTimer,boolean aideProfesseur) throws IOException {
 		this.joueurs = joueurs;
 		this.sac = sac;
 		this.setPlateau(plateau);
 		setJoueurJoueTour(true);
-	//	optionTimer=activeTimer;
+		optionTimer=activeTimer;
 		setNbJoueur(joueurs.size());
-
+		sauvegardePlateau=new Case[15][15];
+			this.activeAideProfesseur(aideProfesseur);
 	}
 
 	public Dictionnaire getDico() {
@@ -123,11 +126,6 @@ public class Partie implements Serializable {
 		
 	}
 
-	public static void main(String[] args) {
-		
-	
-	}
-
 	public boolean isJoueurJoueTour() {
 		return joueurJoueTour;
 	}
@@ -149,6 +147,7 @@ public class Partie implements Serializable {
 		this.joueurQuiJoue = joueurQuiJoue;
 	}
 	
+	//On retourne le joueur qui va jouer le prochain tour
 	public Joueur nextJoueur()
 	{
 		for(int i=0;i<joueurs.size();i++)
@@ -181,21 +180,9 @@ public class Partie implements Serializable {
 		return s;
 	}
 	
-	public String transformEnMot2(LinkedList<Jeton> listChar)
-	{
-		
-		String s="";
-		
-		while(!listChar.isEmpty())
-		{			s+=((char)listChar.getLast().getLettre());
-					listChar.removeLast();
-		}
-		
-		
-		return s;
-	}
+
 	
-	public boolean verifMotValide(LinkedList<Jeton> listChar) throws IOException
+	public boolean verifMotValide(LinkedList<Jeton> listChar,boolean voisin) throws IOException
 	{
 		LinkedList<Jeton> mot=listChar;
 		
@@ -209,7 +196,7 @@ public class Partie implements Serializable {
 		
 		if(dico.motExist(mot1))
 		{
-			this.nbpointsCoupJoue+=this.CalculPoint(mot);
+			this.nbpointsCoupJoue+=this.CalculPoint(mot,voisin);
 			//System.out.println("mot Impec");
 			return true;
 		}
@@ -227,18 +214,22 @@ public class Partie implements Serializable {
 		this.nbpointsCoupJoue = nbpointsCoupJoue;
 	}
 
+	
+	//Lorsqu'un mot est posé on vérifie si tous les mots générés lors du contact
+	//entre le mot posé par le joueur et le mot déjà sur la grille existent
+	
 	public boolean verifMotVoisinValide() throws IOException
 	{
 
-		LinkedList<Object> mots =this.getPlateau().chercheToutLesMotsVoisin();
+		LinkedList<Object> mots =this.getPlateau().chercheToutLesMotsVoisin(); // on récupère tous les voisins 
 		LinkedList<Jeton> mot=new LinkedList<Jeton>();
 		
-		for(int i=0;i<mots.size();i++)
+		for(int i=0;i<mots.size();i++) // on parcours tous les mots voisins
 		{
 			mot=((LinkedList<Jeton>)mots.get(i));
-			System.out.print(this.getMotByList(mot));
 			
-			if(!verifMotValide(mot))
+			
+			if(!verifMotValide(mot,true)) // on vérifie si le mot existe
 			{
 				erreurMsg="Le mot suivant n'est pas valide : "+this.getMotByList(mot);
 				//System.out.println(erreurMsg);
@@ -246,32 +237,29 @@ public class Partie implements Serializable {
 			}
 		}
 		
-	//	System.out.println("\n\nPoints "+this.nbpointsCoupJoue);
-		
 		return true;
 	}
 
-	public static int CalculPoint(LinkedList<Jeton> jet) throws FileNotFoundException {
+	//Cette fonction calcule les points d'un mot passé en paramètre sous forme de jeton en fonction de la position
+	// de chachun des jetons sur le plateau
+	public static int CalculPoint(LinkedList<Jeton> jet,boolean voisin) throws FileNotFoundException {
 		
 		int nbpl =0;
 		int cptMT=0; int cptMD=0;
 		
 		String type;
-		//System.out.println("Dans la fonction calcul"+jet.size());
+		
 		for( int i=0; i<jet.size();i++){
 			
 			type=getPlateau().getPlateau()[jet.get(i).getX()][jet.get(i).getY()].getType();
 			
-		//	System.out.print(jet.get(i).getX()+"  "+jet.get(i).getY()+"  "+type+"  -   ");
-			//System.out.println("Jeton est valide = "+jet.get(i).isValide()+ " et type = "+type+" et points = "+jet.get(i).getPoint());
-			
+		
 			 if(type==("LT")  && !jet.get(i).isValide())
 				{nbpl+=(jet.get(i).getPoint()*3);}
-				//System.out.println("A");}
+			
 			 
 			 else if(type==("LD")&& !jet.get(i).isValide())
 				{nbpl+=(jet.get(i).getPoint()*2);
-				//System.out.println("B");
 				}
 			 
 			 else if(type.equals("MT") &&  !jet.get(i).isValide()) 
@@ -282,17 +270,9 @@ public class Partie implements Serializable {
 			 
 			 else if(type==("X") || jet.get(i).isValide())
 				{nbpl+=(jet.get(i).getPoint());
-				//System.out.println("C + "+jet.get(i).getPoint());
 				}
 				
-			
-			
-			 
-			// System.out.println("nbpl = "+nbpl);
-			
 		}
-		
-		
 		
 		for(int j=0;j<cptMT;j++) {
 			 nbpl= nbpl*3;
@@ -302,7 +282,7 @@ public class Partie implements Serializable {
 		} 
 		
 		// dans le cas où le mot est composé de 7 lettre (Joueur a fait un Scrabble)
-		if(getPlateau().getJetonNoValide().size()==7)
+		if(plateau.getJetonNoValide().size()==7 && !voisin)
 			nbpl=nbpl+50;
 		
 		return nbpl;
@@ -337,7 +317,8 @@ public class Partie implements Serializable {
 
 	public boolean jouePremierTour() throws IOException {
 		
-		if(verifMotValide(getPlateau().jouePremierTour()))
+		
+		if(verifMotValide(getPlateau().jouePremierTour(),false))
 		{
 			int nbJetonPose=this.getPlateau().getJetonNoValide().size();
 			this.getJoueurQuiJoue().piocherNbFois(nbJetonPose,sac);
@@ -350,24 +331,24 @@ public class Partie implements Serializable {
 	
 	}
 	
+	
 	public boolean joueUnTour() throws IOException
 	{
-		if(verifMotValide(this.getPlateau().getMotPose()) && verifMotVoisinValide())
-			{
+		if(verifMotValide(this.getPlateau().getMotPose(),false) && verifMotVoisinValide())//On vérifie si le mot posé et ses voisins	
+			{																		//existe dans le dictionnaire
 				
 			int nbJetonPose=this.getPlateau().getJetonNoValide().size();
-			this.getJoueurQuiJoue().piocherNbFois(nbJetonPose,sac);
+			this.getJoueurQuiJoue().piocherNbFois(nbJetonPose,sac); //On pioche le nombre de jeton que l'on vient de poser
 			
-			System.out.print(" ============================================= >>>> MOT OK <<<<< =======================================");
 				return true;
 			}
 		else{
 			
-			System.out.print(" ============================================= >>>> MOT INVALIDE <<<<< =======================================");
 				return false;
 		}
 	}
 	
+	//Transforme une liste de jeton en String
 	public String getMotByList(LinkedList<Jeton> motList)
 	{
 		String mot="";
@@ -380,6 +361,7 @@ public class Partie implements Serializable {
 		return mot;
 	}
 	
+	//retourne le vainqueur en fonction du nombre de points
 	public Joueur getVainqueurs(){
 		Joueur vainqueur=joueurs.get(0);
 		
@@ -408,5 +390,16 @@ public class Partie implements Serializable {
 
 	public void setNbJoueur(int nbJoueur) {
 		this.nbJoueur = nbJoueur;
+	}
+	
+	public void activeAideProfesseur(boolean aideProf)
+	{
+		if(aideProf)
+		{
+			for(Joueur j:joueurs)
+			{
+				j.compteurAide=5;
+			}
+		}
 	}
 }

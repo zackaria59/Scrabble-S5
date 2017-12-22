@@ -1,8 +1,11 @@
 package View;
 
 import java.awt.Dimension;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 import Controller.ControllerPlateau;
@@ -19,10 +22,12 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -30,7 +35,8 @@ public class Accueil extends StackPane  {
 	private int largeur, hauteur;
 	private ImageView background;
 	private Stage stage2;
-	
+	private boolean echap;
+	private EchapMenu echapMenu;
 
 	public Accueil(Stage stage) {
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -38,7 +44,7 @@ public class Accueil extends StackPane  {
 		int width = (int) dimension.getWidth();
 		largeur = width;
 		hauteur = height;
-
+		echap=false;
 		this.stage2=stage;
 		
 		background = new ImageView(getClass().getClassLoader().getResource("images/backgroundAccueil.jpg").toString());
@@ -58,10 +64,13 @@ public class Accueil extends StackPane  {
 		imageQuitterAccueil.setFitHeight(height*0.10);
 		imageQuitterAccueil.setFitWidth(width*0.25);	
 		
+		ImageView imageChargerPartie=new ImageView(getClass().getClassLoader().getResource("images/chargerPartie.png").toString());
+		imageChargerPartie.setFitHeight(height*0.10);
+		imageChargerPartie.setFitWidth(width*0.25);	
 		
 		
 		
-		menu.getChildren().addAll(imageButtonNewGame,imageQuitterAccueil);
+		menu.getChildren().addAll(imageButtonNewGame,imageChargerPartie,imageQuitterAccueil);
 		
 		imageButtonNewGame.setOnMouseEntered(e->{
 			DropShadow ds = new DropShadow();
@@ -88,6 +97,79 @@ public class Accueil extends StackPane  {
 			this.setVisible(false);
 		});
 			
+		imageChargerPartie.setOnMouseEntered(e->{
+			DropShadow ds = new DropShadow();
+            ds.setOffsetY(10.0);
+            ds.setOffsetX(10.0);
+            ds.setColor(Color.BLACK);
+           
+            imageChargerPartie.setEffect(ds);
+			
+		});
+		
+		imageChargerPartie.setOnMouseExited(e->{
+			imageChargerPartie.setEffect(null);
+		});
+		
+
+		imageChargerPartie.setOnMouseClicked(e->{ 
+
+			FileChooser fileChooser = new FileChooser();
+			 fileChooser.setTitle("Open Resource File");
+			 //fileChooser.setInitialDirectory(new File(getClass().getResource("sauvegarde").toString()));
+			 
+			        
+			 File selectedFile = fileChooser.showOpenDialog(stage);
+			 if (selectedFile != null) {
+			    //stage.display(selectedFile);
+			 }
+			
+			System.out.println(selectedFile);
+			FileInputStream fis=null;
+			try {
+				fis = new FileInputStream(selectedFile);
+				
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			ObjectInputStream ois = null;
+			try {
+				ois = new ObjectInputStream(fis);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			try {
+				Partie p=(Partie) ois.readObject();
+				System.out.println("Pseudo "+p.getJoueurs().get(0).getPseudo());
+				
+				FenetreJeu fj=new FenetreJeu(stage);
+				ControllerPlateau cp=new ControllerPlateau(p,fj,true);
+				echapMenu=new EchapMenu(largeur,hauteur,p,stage);
+				echapMenu.setVisible(false);
+				fj.getChildren().add(echapMenu);
+				fj.setVisible(true);
+				stage.getScene().setRoot(fj);
+				
+				stage.getScene().setOnKeyPressed(ee->{
+					
+					if(ee.getCode()==KeyCode.ESCAPE)
+					{
+						echap=!echap;
+						this.echapMenu.setVisible(echap);
+					}
+				});	
+				
+			} catch (ClassNotFoundException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		
+
 
 		imageQuitterAccueil.setOnMouseEntered(e->{
 			DropShadow ds = new DropShadow();

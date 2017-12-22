@@ -42,7 +42,7 @@ public class FenetreJeu extends StackPane{
 
 
 
-	public FenetreJeu() {
+	public FenetreJeu(Stage stage) {
 		
 		// On récupère la résolution de l'écran
 		
@@ -102,8 +102,9 @@ public class FenetreJeu extends StackPane{
 		fm.setVisible(false);
 		
 		chrono=new Chronometre(largeur,hauteur);
+		chrono.setVisible(false);
 		
-		finPartie=new FinPartie(largeur,hauteur);
+		finPartie=new FinPartie(largeur,hauteur,stage);
 		finPartie.setVisible(false);
 		
 		this.setPadding(new Insets(0.03*hauteur, 0.03*largeur,0.03*hauteur,0.03*largeur));

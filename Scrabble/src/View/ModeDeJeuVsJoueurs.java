@@ -210,14 +210,19 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 	
 	private void lancerParti() {
 		
-		FenetreJeu fj =new FenetreJeu();
+		FenetreJeu fj =new FenetreJeu(stage);
 		fj.setVisible(true);
 		
 		boolean timer=false;
-		
+		boolean aideProf=false;
 		if(buttonSwitch.isOn)timer=true;
 		else{
 			timer=false;
+		}
+		
+		if(buttonSwitch2.isOn)aideProf=true;
+		else{
+			aideProf=false;
 		}
 		ArrayList<Joueur> joueurs=new ArrayList<Joueur>();
 		
@@ -236,8 +241,8 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 		
 		Partie p=null;
 		try {
-			p = new Partie(joueurs,sac,plateau,timer);
-			echapMenu=new EchapMenu(largeur,hauteur,p);
+			p = new Partie(joueurs,sac,plateau,timer,aideProf);
+			echapMenu=new EchapMenu(largeur,hauteur,p,stage);
 			echapMenu.setVisible(false);
 			fj.getChildren().add(echapMenu);
 		} catch (FileNotFoundException e1) {
@@ -249,7 +254,7 @@ public class ModeDeJeuVsJoueurs extends StackPane  {
 		}
 	
 		try {
-			ControllerPlateau cp =new ControllerPlateau(p,fj);
+			ControllerPlateau cp =new ControllerPlateau(p,fj,false);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
